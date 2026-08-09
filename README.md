@@ -1,36 +1,44 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Alex Cosentino Portfolio
 
-## Getting Started
+A Catppuccin Mocha portfolio inspired by Alex's real WezTerm, Starship, and
+NvChad setup. On the first visit of a browser session, a fastfetch-style Zsh
+boot types `nvim .` and transitions into a recruiter-friendly Neovim workspace.
 
-First, run the development server:
+## Run locally
 
 ```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000).
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Use the portfolio
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- Open sections from the file explorer or buffer tabs. Section hashes are
+  shareable, for example [http://localhost:3000/#projects](http://localhost:3000/#projects).
+- Toggle the simulated bottom terminal from the status line or with
+  `Ctrl+Backquote`, then enter `help` to see its locally simulated commands.
+- Select **Skip intro** to bypass the boot. Reduced-motion preferences shorten
+  the transition automatically, and later visits in the same browser session
+  open the workspace directly.
+- Small screens use a collapsible explorer, while browsers without JavaScript
+  receive a scrollable static portfolio.
 
-## Learn More
+## Customize the portfolio
 
-To learn more about Next.js, take a look at the following resources:
+- Edit professional content, links, projects, experience, and skills in
+  `app/_components/portfolio/data.ts`.
+- Replace `public/alex_cosentino_resume.pdf` to update the downloadable resume.
+- Set a project's optional `image` field to a public asset path to replace its
+  generated visual summary with a screenshot.
+- Change `--glass-opacity` or `--glass-blur` in `app/globals.css` to adjust or
+  remove the translucent backdrop treatment.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Quality checks
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+```bash
+npm run lint
+npx next typegen && npx tsc --noEmit
+npm run build
+```
