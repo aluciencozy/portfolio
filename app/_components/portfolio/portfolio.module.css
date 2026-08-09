@@ -1375,11 +1375,23 @@
 .gitStatus { display: flex; align-items: center; gap: 6px; color: var(--ctp-overlay1); }
 .statusRight > span,
 .statusRight button { display: flex; align-items: center; border: 0; padding: 0 12px; color: inherit; background: transparent; font: inherit; }
-.statusRight button { gap: 7px; cursor: pointer; }
-.statusRight button:hover,
-.statusRight .statusButtonActive { color: var(--ctp-crust); background: var(--ctp-green); }
+.statusRight button {
+  height: 24px;
+  align-self: center;
+  gap: 7px;
+  margin-right: 4px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+.statusRight button:hover { color: var(--ctp-text); background: rgb(49 50 68 / 0.72); }
+.statusRight .statusButtonActive {
+  color: var(--ctp-green);
+  background: rgb(166 227 161 / 0.1);
+  box-shadow: inset 0 0 0 1px rgb(166 227 161 / 0.22);
+}
+.statusRight .statusButtonActive:hover { color: var(--ctp-green); background: rgb(166 227 161 / 0.14); }
 .statusRight kbd { border: 1px solid rgb(147 153 178 / 0.35); border-radius: 3px; padding: 2px 4px; font: inherit; font-size: 0.48rem; }
-.statusRight .statusButtonActive kbd { border-color: rgb(17 17 27 / 0.3); }
+.statusRight .statusButtonActive kbd { border-color: rgb(166 227 161 / 0.3); }
 .statusPosition { border-radius: 14px 0 0 14px; color: var(--ctp-crust) !important; background: var(--ctp-teal) !important; font-weight: 800 !important; }
 
 .explorerScrim { display: none; }
