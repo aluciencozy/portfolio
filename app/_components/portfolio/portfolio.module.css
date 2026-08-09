@@ -1,6 +1,10 @@
-.experienceRoot {
+.experienceRoot,
+.fallbackStage {
   --app-inset-block: clamp(2rem, 4.4vh, 4.5rem);
   --app-inset-inline: clamp(1.5rem, 3.9vw, 6.25rem);
+}
+
+.experienceRoot {
   position: relative;
   isolation: isolate;
   display: grid;
@@ -60,6 +64,7 @@
 }
 
 .fallbackStage {
+  position: fixed;
   z-index: 10;
   overflow: auto;
   place-items: start center;
@@ -1384,7 +1389,8 @@
 }
 
 @media (max-width: 800px) {
-  .experienceRoot {
+  .experienceRoot,
+  .fallbackStage {
     --app-inset-block: 14px;
     --app-inset-inline: 12px;
   }
@@ -1434,7 +1440,8 @@
 }
 
 @media (max-width: 560px) {
-  .experienceRoot {
+  .experienceRoot,
+  .fallbackStage {
     --app-inset-block: 8px;
     --app-inset-inline: 7px;
   }
