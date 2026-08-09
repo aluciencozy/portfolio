@@ -1105,6 +1105,13 @@
   filter: drop-shadow(0 8px 18px rgb(17 17 27 / 0.54));
 }
 
+@media (min-width: 1051px) {
+  .asciiPortrait pre {
+    font-size: clamp(5.4px, 0.44vw, 6.6px);
+    line-height: 0.76;
+  }
+}
+
 .profileCode {
   position: relative;
   z-index: 1;
