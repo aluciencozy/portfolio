@@ -66,4 +66,3 @@ export function workspaceReducer(
       return { ...state, terminalHistory: [] };
   }
 }
-

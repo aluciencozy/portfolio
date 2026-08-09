@@ -1,8 +1,8 @@
 # Alex Cosentino Portfolio
 
 A Catppuccin Mocha portfolio inspired by Alex's real WezTerm, Starship, and
-NvChad setup. The site boots through a simulated Zsh terminal, types `nvim .`,
-and transitions into a recruiter-friendly Neovim workspace.
+NvChad setup. On the first visit of a browser session, a fastfetch-style Zsh
+boot types `nvim .` and transitions into a recruiter-friendly Neovim workspace.
 
 ## Run locally
 
@@ -12,6 +12,18 @@ npm run dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000).
+
+## Use the portfolio
+
+- Open sections from the file explorer or buffer tabs. Section hashes are
+  shareable, for example [http://localhost:3000/#projects](http://localhost:3000/#projects).
+- Toggle the simulated bottom terminal from the status line or with
+  `Ctrl+Backquote`, then enter `help` to see its locally simulated commands.
+- Select **Skip intro** to bypass the boot. Reduced-motion preferences shorten
+  the transition automatically, and later visits in the same browser session
+  open the workspace directly.
+- Small screens use a collapsible explorer, while browsers without JavaScript
+  receive a scrollable static portfolio.
 
 ## Customize the portfolio
 
@@ -27,6 +39,6 @@ Open [http://localhost:3000](http://localhost:3000).
 
 ```bash
 npm run lint
-npx tsc --noEmit
+npx next typegen && npx tsc --noEmit
 npm run build
 ```
