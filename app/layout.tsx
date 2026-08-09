@@ -6,9 +6,9 @@ import "@fontsource/jetbrains-mono/700.css";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Alex Cosentino | Software Engineer",
+  title: "Alex Cosentino | Software Developer",
   description:
-    "Software engineer and UCF computer science student building reliable full-stack systems, cloud infrastructure, and thoughtful developer experiences.",
+    "Software developer and UCF computer science student building reliable full-stack systems, cloud infrastructure, and thoughtful developer experiences.",
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {

@@ -99,7 +99,7 @@ export function BootSequence({
               </div>
               <div className={styles.fastfetchRule} />
               <dl>
-                <div><dt>role</dt><dd>Software Engineering Intern</dd></div>
+                <div><dt>role</dt><dd>Software Developer Intern</dd></div>
                 <div><dt>education</dt><dd>Computer Science · UCF</dd></div>
                 <div><dt>gpa</dt><dd>4.0</dd></div>
                 <div><dt>focus</dt><dd>Full-stack systems &amp; developer experience</dd></div>

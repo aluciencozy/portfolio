@@ -1248,6 +1248,10 @@
 .educationCard p { margin: 0 0 24px; color: var(--ctp-subtext0); font-size: 0.68rem; line-height: 1.6; }
 .educationCard > div:not(.cardIcon) { display: flex; align-items: center; gap: 8px; margin-top: 9px; color: var(--ctp-subtext1); font-size: 0.63rem; }
 .educationCard > div svg { color: var(--ctp-green); }
+.educationCard > .cardIcon svg {
+  color: var(--ctp-crust);
+  stroke-width: 2.3;
+}
 .educationCard small { display: block; margin-top: 18px; color: var(--ctp-overlay0); font-size: 0.57rem; }
 
 .valueGrid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; margin-top: clamp(4rem, 8vh, 7rem); }

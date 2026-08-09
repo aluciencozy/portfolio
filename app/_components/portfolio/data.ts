@@ -119,6 +119,7 @@ export const projects: PortfolioProject[] = [
     status: "In development · 2026",
     accent: "blue",
     href: "https://github.com/aluciencozy/fe-arena",
+    image: "/projects/fe-arena.png",
     highlights: [
       "Server-authoritative five-round matches with queueing, rematches, chat, deadline-safe state transitions, and reconnect recovery",
       "Original multi-format question bank plus timed browser-only C execution inside prewarmed WebAssembly workers",
@@ -144,7 +145,7 @@ export const projects: PortfolioProject[] = [
 
 export const experience: ExperienceEntry[] = [
   {
-    role: "Software Engineering Intern",
+    role: "Software Developer Intern",
     organization: "Vesta Teleradiology",
     location: "Lake Mary, FL",
     period: "Feb 2026 - Present",

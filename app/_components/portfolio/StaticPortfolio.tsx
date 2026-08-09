@@ -5,7 +5,7 @@ export function StaticPortfolio() {
   return (
     <main className={styles.fallbackDocument}>
       <header className={styles.fallbackHero}>
-        <span>Software Engineer · Orlando, Florida</span>
+        <span>Software Developer · Orlando, Florida</span>
         <h1>Alex Cosentino</h1>
         <p>
           I build reliable full-stack systems with product-minded detail,

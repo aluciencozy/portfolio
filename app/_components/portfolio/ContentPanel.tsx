@@ -13,7 +13,6 @@ import {
   GitBranch,
   Mail,
   MapPin,
-  Sparkles,
 } from "lucide-react";
 import {
   education,
@@ -36,7 +35,7 @@ function ProfileVisual() {
     <div
       className={`${styles.mediaSlot} ${styles.profileVisual}`}
       role="img"
-      aria-label="Visual profile card for Alex Cosentino, a software engineer in Orlando"
+      aria-label="Visual profile card for Alex Cosentino, a software developer in Orlando"
     >
       <div className={styles.visualTitlebar} aria-hidden="true">
         <span /><span /><span />
@@ -44,7 +43,7 @@ function ProfileVisual() {
       </div>
       <div className={styles.profileMonogram} aria-hidden="true">AC</div>
       <div className={styles.profileCode} aria-hidden="true">
-        <span><i>const</i> engineer = {"{"}</span>
+        <span><i>const</i> developer = {"{"}</span>
         <span>name: <strong>&quot;Alex Cosentino&quot;</strong>,</span>
         <span>focus: <strong>&quot;full-stack systems&quot;</strong>,</span>
         <span>location: <strong>&quot;Orlando, FL&quot;</strong></span>
@@ -130,7 +129,7 @@ function Overview({ onNavigate }: Pick<ContentPanelProps, "onNavigate">) {
         <div className={styles.heroCopy}>
           <div className={styles.availabilityPill}>
             <span />
-            Software Engineering Intern · CS at UCF
+            Software Developer Intern · CS at UCF
           </div>
           <p className={styles.editorComment}>{"// README.md"}</p>
           <h1>
@@ -138,7 +137,7 @@ function Overview({ onNavigate }: Pick<ContentPanelProps, "onNavigate">) {
           </h1>
           <h2>I build reliable full-stack systems with product-minded detail.</h2>
           <p className={styles.heroDescription}>
-            Software engineer and computer science student focused on type-safe
+            Software developer and computer science student focused on type-safe
             web applications, data systems, cloud delivery, and developer
             experience. Currently building healthcare credentialing software
             at Vesta Teleradiology.
@@ -211,13 +210,13 @@ function About() {
     <div className={styles.standardPage}>
       <SectionHeading
         eyebrow="ABOUT.MD"
-        title="Engineer, student, and relentless systems improver."
+        title="Developer, student, and relentless systems improver."
         description="I care about making complex software feel clear, dependable, and genuinely useful to the people operating it."
       />
       <div className={styles.aboutGrid}>
         <div className={styles.proseCard}>
           <p>
-            I&apos;m Alex, a software engineer pursuing a B.S. in Computer Science
+            I&apos;m Alex, a software developer pursuing a B.S. in Computer Science
             at the University of Central Florida while working on production
             healthcare software at Vesta Teleradiology.
           </p>
@@ -228,9 +227,9 @@ function About() {
           </p>
           <p>
             I bring the same attention to my tools and interfaces that I bring
-            to architecture. This portfolio takes its visual language directly
-            from the Neovim, WezTerm, Starship, and Catppuccin environment I use
-            every day.
+            to architecture. My development environment is built around a
+            carefully tuned terminal workflow and Catppuccin Mocha, a theme I
+            genuinely love and use everywhere I can.
           </p>
         </div>
         <div className={styles.educationCard}>
@@ -245,7 +244,7 @@ function About() {
       </div>
       <div className={styles.valueGrid}>
         <article><span>01</span><h3>Robust by default</h3><p>Data integrity, useful types, clear boundaries, and failure modes designed before launch.</p></article>
-        <article><span>02</span><h3>Product-aware engineering</h3><p>Technical decisions grounded in how people actually use and maintain the system.</p></article>
+        <article><span>02</span><h3>Product-aware development</h3><p>Technical decisions grounded in how people actually use and maintain the system.</p></article>
         <article><span>03</span><h3>Always improving</h3><p>Curiosity applied equally to systems, tooling, visual polish, and team communication.</p></article>
       </div>
     </div>
@@ -404,10 +403,10 @@ function Contact() {
   return (
     <div className={`${styles.standardPage} ${styles.contactPage}`}>
       <div className={styles.contactIntro}>
-        <span><Sparkles size={16} /> CONTACT.MD</span>
+        <span>CONTACT.MD</span>
         <h1>Let&apos;s build something thoughtful.</h1>
         <p>
-          I&apos;m always happy to talk about software engineering opportunities,
+          I&apos;m always happy to talk about software development opportunities,
           ambitious products, developer tooling, or a particularly good Neovim setup.
         </p>
       </div>
