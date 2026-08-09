@@ -10,6 +10,7 @@ interface StatuslineProps {
   terminalOpen: boolean;
   onToggleTerminal: () => void;
   inert?: boolean;
+  mode: "NORMAL" | "COMMAND" | "TERMINAL";
 }
 
 export function Statusline({
@@ -17,13 +18,14 @@ export function Statusline({
   terminalOpen,
   onToggleTerminal,
   inert = false,
+  mode,
 }: StatuslineProps) {
   const section = sectionById[activeSection];
 
   return (
     <footer className={styles.statusline} inert={inert}>
       <div className={styles.statusLeft}>
-        <span className={styles.modeBadge}>NORMAL</span>
+        <span className={styles.modeBadge} data-mode={mode}>{mode}</span>
         <span className={styles.statusFile}>{section.fileName}</span>
         <span className={styles.gitStatus}>
           <GitBranch size={13} aria-hidden="true" />

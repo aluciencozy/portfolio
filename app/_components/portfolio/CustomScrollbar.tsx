@@ -8,8 +8,10 @@ import type {
 import { useCallback, useLayoutEffect, useRef, useState } from "react";
 import styles from "./portfolio.module.css";
 
-interface EditorScrollbarProps {
-  contentKey: string;
+interface CustomScrollbarProps {
+  contentKey: string | number;
+  controlsId: string;
+  label: string;
   scrollRef: RefObject<HTMLElement | null>;
 }
 
@@ -22,7 +24,6 @@ interface ScrollbarMetrics {
 }
 
 const minimumThumbSize = 36;
-
 const initialMetrics: ScrollbarMetrics = {
   maximum: 0,
   offset: 0,
@@ -31,39 +32,32 @@ const initialMetrics: ScrollbarMetrics = {
   visible: false,
 };
 
-export function EditorScrollbar({ contentKey, scrollRef }: EditorScrollbarProps) {
+export function CustomScrollbar({
+  contentKey,
+  controlsId,
+  label,
+  scrollRef,
+}: CustomScrollbarProps) {
   const trackRef = useRef<HTMLDivElement>(null);
-  const dragState = useRef<{
-    pointerId: number;
-    startScrollTop: number;
-    startY: number;
-  } | null>(null);
+  const dragState = useRef<{ pointerId: number; startScrollTop: number; startY: number } | null>(null);
   const [metrics, setMetrics] = useState(initialMetrics);
 
   const sync = useCallback(() => {
     const scrollElement = scrollRef.current;
     const trackElement = trackRef.current;
-
     if (!scrollElement || !trackElement) return;
 
     const maximum = Math.max(0, scrollElement.scrollHeight - scrollElement.clientHeight);
     const trackHeight = trackElement.clientHeight;
     const visible = maximum > 1 && trackHeight > 0;
     const size = visible
-      ? Math.min(
-          trackHeight,
-          Math.max(
-            minimumThumbSize,
-            trackHeight * (scrollElement.clientHeight / scrollElement.scrollHeight),
-          ),
-        )
+      ? Math.min(trackHeight, Math.max(minimumThumbSize, trackHeight * (scrollElement.clientHeight / scrollElement.scrollHeight)))
       : trackHeight;
     const travel = Math.max(0, trackHeight - size);
-    const offset = maximum > 0 ? (scrollElement.scrollTop / maximum) * travel : 0;
 
     setMetrics({
       maximum,
-      offset,
+      offset: maximum > 0 ? (scrollElement.scrollTop / maximum) * travel : 0,
       size,
       value: scrollElement.scrollTop,
       visible,
@@ -73,7 +67,6 @@ export function EditorScrollbar({ contentKey, scrollRef }: EditorScrollbarProps)
   useLayoutEffect(() => {
     const scrollElement = scrollRef.current;
     const trackElement = trackRef.current;
-
     if (!scrollElement || !trackElement) return;
 
     let animationFrame = 0;
@@ -100,18 +93,10 @@ export function EditorScrollbar({ contentKey, scrollRef }: EditorScrollbarProps)
     const scrollElement = scrollRef.current;
     const trackElement = trackRef.current;
     if (!scrollElement || !trackElement || !metrics.visible) return;
-
     const trackBox = trackElement.getBoundingClientRect();
     const travel = Math.max(1, trackBox.height - metrics.size);
-    const offset = Math.min(
-      travel,
-      Math.max(0, clientY - trackBox.top - metrics.size / 2),
-    );
-
-    scrollElement.scrollTo({
-      top: (offset / travel) * metrics.maximum,
-      behavior: "smooth",
-    });
+    const offset = Math.min(travel, Math.max(0, clientY - trackBox.top - metrics.size / 2));
+    scrollElement.scrollTo({ top: (offset / travel) * metrics.maximum, behavior: "smooth" });
   };
 
   const handleTrackPointerDown = (event: ReactPointerEvent<HTMLDivElement>) => {
@@ -123,14 +108,9 @@ export function EditorScrollbar({ contentKey, scrollRef }: EditorScrollbarProps)
   const handleThumbPointerDown = (event: ReactPointerEvent<HTMLDivElement>) => {
     const scrollElement = scrollRef.current;
     if (!scrollElement) return;
-
     event.preventDefault();
     event.currentTarget.setPointerCapture(event.pointerId);
-    dragState.current = {
-      pointerId: event.pointerId,
-      startScrollTop: scrollElement.scrollTop,
-      startY: event.clientY,
-    };
+    dragState.current = { pointerId: event.pointerId, startScrollTop: scrollElement.scrollTop, startY: event.clientY };
   };
 
   const handleThumbPointerMove = (event: ReactPointerEvent<HTMLDivElement>) => {
@@ -138,10 +118,8 @@ export function EditorScrollbar({ contentKey, scrollRef }: EditorScrollbarProps)
     const trackElement = trackRef.current;
     const drag = dragState.current;
     if (!scrollElement || !trackElement || !drag || drag.pointerId !== event.pointerId) return;
-
     const travel = Math.max(1, trackElement.clientHeight - metrics.size);
-    scrollElement.scrollTop =
-      drag.startScrollTop + ((event.clientY - drag.startY) / travel) * metrics.maximum;
+    scrollElement.scrollTop = drag.startScrollTop + ((event.clientY - drag.startY) / travel) * metrics.maximum;
   };
 
   const endThumbDrag = (event: ReactPointerEvent<HTMLDivElement>) => {
@@ -155,7 +133,6 @@ export function EditorScrollbar({ contentKey, scrollRef }: EditorScrollbarProps)
   const handleKeyDown = (event: KeyboardEvent<HTMLDivElement>) => {
     const scrollElement = scrollRef.current;
     if (!scrollElement) return;
-
     const pageDistance = scrollElement.clientHeight * 0.85;
     const actions: Partial<Record<string, number>> = {
       ArrowDown: scrollElement.scrollTop + 48,
@@ -167,7 +144,6 @@ export function EditorScrollbar({ contentKey, scrollRef }: EditorScrollbarProps)
     };
     const nextPosition = actions[event.key];
     if (nextPosition === undefined) return;
-
     event.preventDefault();
     scrollElement.scrollTo({ top: nextPosition, behavior: "smooth" });
   };
@@ -175,10 +151,10 @@ export function EditorScrollbar({ contentKey, scrollRef }: EditorScrollbarProps)
   return (
     <div
       ref={trackRef}
-      className={`${styles.editorScrollRail} ${metrics.visible ? styles.editorScrollRailVisible : ""}`}
+      className={`${styles.customScrollRail} ${metrics.visible ? styles.customScrollRailVisible : ""}`}
       role="scrollbar"
-      aria-controls="portfolio-scroll-content"
-      aria-label="Portfolio content scroll position"
+      aria-controls={controlsId}
+      aria-label={label}
       aria-orientation="vertical"
       aria-valuemax={Math.round(metrics.maximum)}
       aria-valuemin={0}
@@ -188,7 +164,7 @@ export function EditorScrollbar({ contentKey, scrollRef }: EditorScrollbarProps)
       onPointerDown={handleTrackPointerDown}
     >
       <div
-        className={styles.editorScrollThumb}
+        className={styles.customScrollThumb}
         style={{ height: metrics.size, transform: `translateY(${metrics.offset}px)` }}
         onPointerDown={handleThumbPointerDown}
         onPointerMove={handleThumbPointerMove}

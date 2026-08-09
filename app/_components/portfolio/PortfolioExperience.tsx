@@ -4,7 +4,10 @@ import { useCallback, useEffect, useReducer, useRef, useState } from "react";
 import { AnimatePresence, MotionConfig, useReducedMotion } from "motion/react";
 import { BootSequence } from "./BootSequence";
 import { isSectionId } from "./data";
+import { runNeovimCommand } from "./neovim-commands";
+import type { NeovimAction } from "./neovim-keymaps";
 import { runTerminalCommand } from "./terminal-commands";
+import { useNeovimKeymaps } from "./use-neovim-keymaps";
 import type { PortfolioSectionId, TerminalEntry } from "./types";
 import { initialWorkspaceState, workspaceReducer } from "./workspace-state";
 import { WorkspaceShell } from "./WorkspaceShell";
@@ -34,9 +37,13 @@ export function PortfolioExperience() {
   const reducedMotion = useReducedMotion() ?? false;
   const [phase, setPhase] = useState<ExperiencePhase>("checking");
   const [state, dispatch] = useReducer(workspaceReducer, initialWorkspaceState);
+  const [commandLineOpen, setCommandLineOpen] = useState(false);
+  const [commandMessage, setCommandMessage] = useState("");
+  const [commandMessageTone, setCommandMessageTone] = useState<"default" | "error">("default");
   const entryId = useRef(1);
   const collapseTimer = useRef<number | undefined>(undefined);
   const bootFinished = useRef(false);
+  const messageTimer = useRef<number | undefined>(undefined);
 
   const openHashSection = useCallback(() => {
     const hash = window.location.hash.slice(1);
@@ -59,6 +66,7 @@ export function PortfolioExperience() {
       window.clearTimeout(hydrationTimer);
       window.removeEventListener("hashchange", openHashSection);
       if (collapseTimer.current) window.clearTimeout(collapseTimer.current);
+      if (messageTimer.current) window.clearTimeout(messageTimer.current);
     };
   }, [openHashSection]);
 
@@ -101,6 +109,112 @@ export function PortfolioExperience() {
     [state.activeSection, state.openBuffers],
   );
 
+  const cycleBuffer = useCallback(
+    (direction: 1 | -1) => {
+      const currentIndex = state.openBuffers.indexOf(state.activeSection);
+      const nextIndex =
+        (currentIndex + direction + state.openBuffers.length) % state.openBuffers.length;
+      navigate(state.openBuffers[nextIndex]);
+    },
+    [navigate, state.activeSection, state.openBuffers],
+  );
+
+  const showCommandMessage = useCallback((message: string, tone: "default" | "error" = "default") => {
+    if (messageTimer.current) window.clearTimeout(messageTimer.current);
+    setCommandMessage(message);
+    setCommandMessageTone(tone);
+    if (message) {
+      messageTimer.current = window.setTimeout(() => setCommandMessage(""), 4200);
+    }
+  }, []);
+
+  const handleNeovimAction = useCallback(
+    (action: NeovimAction) => {
+      const content = document.getElementById("portfolio-scroll-content");
+      const scroll = (top: number) => content?.scrollBy({ top, behavior: reducedMotion ? "auto" : "smooth" });
+
+      switch (action) {
+        case "command-line":
+          setCommandMessage("");
+          setCommandLineOpen(true);
+          break;
+        case "document-top":
+          content?.scrollTo({ top: 0, behavior: reducedMotion ? "auto" : "smooth" });
+          break;
+        case "document-bottom":
+          content?.scrollTo({ top: content.scrollHeight, behavior: reducedMotion ? "auto" : "smooth" });
+          break;
+        case "scroll-line-down":
+          scroll(52);
+          break;
+        case "scroll-line-up":
+          scroll(-52);
+          break;
+        case "scroll-half-down":
+          scroll((content?.clientHeight ?? 0) / 2);
+          break;
+        case "scroll-half-up":
+          scroll(-(content?.clientHeight ?? 0) / 2);
+          break;
+        case "next-buffer":
+          cycleBuffer(1);
+          break;
+        case "previous-buffer":
+          cycleBuffer(-1);
+          break;
+        case "toggle-explorer":
+          dispatch({ type: "toggle-explorer" });
+          break;
+        case "toggle-terminal":
+          dispatch({ type: "toggle-terminal" });
+          break;
+      }
+    },
+    [cycleBuffer, reducedMotion],
+  );
+
+  useNeovimKeymaps({
+    enabled: phase === "ready" && !commandLineOpen,
+    onAction: handleNeovimAction,
+  });
+
+  const handleNeovimCommand = useCallback(
+    (command: string) => {
+      const result = runNeovimCommand(command);
+      setCommandLineOpen(false);
+
+      switch (result.type) {
+        case "navigate":
+          navigate(result.section);
+          showCommandMessage(`"${result.section}" opened`);
+          break;
+        case "close-buffer":
+          if (state.activeSection === "overview") {
+            showCommandMessage("E444: Cannot close the last portfolio buffer", "error");
+          } else {
+            closeBuffer(state.activeSection);
+          }
+          break;
+        case "next-buffer":
+          cycleBuffer(1);
+          break;
+        case "previous-buffer":
+          cycleBuffer(-1);
+          break;
+        case "toggle-terminal":
+          dispatch({ type: "set-terminal", open: true });
+          break;
+        case "toggle-explorer":
+          dispatch({ type: "toggle-explorer" });
+          break;
+        case "message":
+          showCommandMessage(result.message, result.tone);
+          break;
+      }
+    },
+    [closeBuffer, cycleBuffer, navigate, showCommandMessage, state.activeSection],
+  );
+
   const completeBoot = useCallback(() => {
     if (bootFinished.current) return;
     bootFinished.current = true;
@@ -126,7 +240,10 @@ export function PortfolioExperience() {
 
   const handleTerminalCommand = useCallback(
     (command: string) => {
-      const result = runTerminalCommand(command);
+      if (command.trim()) {
+        dispatch({ type: "record-terminal-command", command });
+      }
+      const result = runTerminalCommand(command, state.terminalCwd);
       if (result.type === "clear") {
         dispatch({ type: "clear-terminal" });
         return;
@@ -135,13 +252,20 @@ export function PortfolioExperience() {
       const entry: TerminalEntry = {
         id: entryId.current,
         command,
+        cwd: state.terminalCwd,
         lines: result.lines,
         tone: result.type === "print" ? result.tone : "success",
       };
       entryId.current += 1;
       dispatch({ type: "append-terminal", entry });
 
+      if ("cwd" in result && result.cwd) {
+        dispatch({ type: "set-terminal-cwd", cwd: result.cwd });
+      }
       if (result.type === "navigate") navigate(result.section);
+      if (result.type === "print" && result.href) {
+        window.open(result.href, "_blank", "noopener,noreferrer");
+      }
       if (result.type === "close") {
         window.setTimeout(
           () => dispatch({ type: "set-terminal", open: false }),
@@ -149,7 +273,7 @@ export function PortfolioExperience() {
         );
       }
     },
-    [navigate],
+    [navigate, state.terminalCwd],
   );
 
   return (
@@ -182,8 +306,12 @@ export function PortfolioExperience() {
               onToggleExplorer={() => dispatch({ type: "toggle-explorer" })}
               onCloseExplorer={() => dispatch({ type: "set-explorer", open: false })}
               onToggleTerminal={() => dispatch({ type: "toggle-terminal" })}
-              onCloseTerminal={() => dispatch({ type: "set-terminal", open: false })}
               onTerminalCommand={handleTerminalCommand}
+              commandLineOpen={commandLineOpen}
+              commandMessage={commandMessage}
+              commandMessageTone={commandMessageTone}
+              onCancelCommandLine={() => setCommandLineOpen(false)}
+              onNeovimCommand={handleNeovimCommand}
             />
           )}
         </AnimatePresence>

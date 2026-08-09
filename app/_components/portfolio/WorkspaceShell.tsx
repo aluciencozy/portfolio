@@ -5,6 +5,7 @@ import { AnimatePresence, motion } from "motion/react";
 import { BufferTabs } from "./BufferTabs";
 import { ContentPanel } from "./ContentPanel";
 import { FileExplorer } from "./FileExplorer";
+import { NeovimCommandLine } from "./NeovimCommandLine";
 import { Statusline } from "./Statusline";
 import { InteractiveTerminal } from "./TerminalSurface";
 import type { PortfolioSectionId, WorkspaceState } from "./types";
@@ -19,8 +20,12 @@ interface WorkspaceShellProps {
   onToggleExplorer: () => void;
   onCloseExplorer: () => void;
   onToggleTerminal: () => void;
-  onCloseTerminal: () => void;
   onTerminalCommand: (command: string) => void;
+  commandLineOpen: boolean;
+  commandMessage: string;
+  commandMessageTone: "default" | "error";
+  onCancelCommandLine: () => void;
+  onNeovimCommand: (command: string) => void;
 }
 
 export function WorkspaceShell({
@@ -32,8 +37,12 @@ export function WorkspaceShell({
   onToggleExplorer,
   onCloseExplorer,
   onToggleTerminal,
-  onCloseTerminal,
   onTerminalCommand,
+  commandLineOpen,
+  commandMessage,
+  commandMessageTone,
+  onCancelCommandLine,
+  onNeovimCommand,
 }: WorkspaceShellProps) {
   const explorerButtonRef = useRef<HTMLButtonElement>(null);
   const explorerCloseButtonRef = useRef<HTMLButtonElement>(null);
@@ -165,19 +174,28 @@ export function WorkspaceShell({
               >
                 <InteractiveTerminal
                   history={state.terminalHistory}
+                  commandHistory={state.terminalCommandHistory}
+                  cwd={state.terminalCwd}
                   onSubmit={onTerminalCommand}
-                  onClose={onCloseTerminal}
                 />
               </motion.div>
             )}
           </AnimatePresence>
         </section>
       </div>
+      <NeovimCommandLine
+        open={commandLineOpen}
+        message={commandMessage}
+        messageTone={commandMessageTone}
+        onCancel={onCancelCommandLine}
+        onSubmit={onNeovimCommand}
+      />
       <Statusline
         activeSection={state.activeSection}
         terminalOpen={state.terminalOpen}
         onToggleTerminal={onToggleTerminal}
         inert={explorerModalOpen}
+        mode={commandLineOpen ? "COMMAND" : state.terminalOpen ? "TERMINAL" : "NORMAL"}
       />
     </motion.div>
   );
