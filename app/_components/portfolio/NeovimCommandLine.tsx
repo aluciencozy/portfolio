@@ -42,6 +42,11 @@ export function NeovimCommandLine({
     onCancel();
   };
 
+  const cancelCommand = () => {
+    setValue("");
+    onCancel();
+  };
+
   return (
     <div
       className={`${styles.neovimCommandBar} ${messageTone === "error" ? styles.neovimCommandError : ""}`}
@@ -59,6 +64,7 @@ export function NeovimCommandLine({
             value={value}
             onChange={(event) => setValue(event.target.value)}
             onKeyDown={handleKeyDown}
+            onBlur={cancelCommand}
             autoComplete="off"
             autoCapitalize="off"
             spellCheck={false}

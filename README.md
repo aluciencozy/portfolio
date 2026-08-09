@@ -24,9 +24,13 @@ Open [http://localhost:3000](http://localhost:3000).
   never execute a real shell process.
 - Press `:` outside an input to open the Neovim command line. Supported commands
   include `:edit`, `:quit`, `:bnext`, `:bprevious`, `:terminal`, `:Explore`, and
-  `:buffers`. Vim motions `j`, `k`, `gg`, `G`, `Ctrl+d`, `Ctrl+u`, `gt`, and `gT`
-  work in the portfolio content area. Portfolio mappings use Space as leader:
-  `Space e` toggles the explorer and `Space t` toggles the terminal.
+  `:buffers`. Vim motions `j`, `k`, `gg`, `G`, `Ctrl+d`, `Ctrl+u`, `g` then `t`,
+  and `g` then `Shift+t` work in the portfolio content area. Portfolio mappings
+  use Space as leader: `Space e` focuses the explorer and `Space t` toggles the
+  terminal. Once focused, the explorer supports `j`, `k`, `h`, `l`, `Enter`,
+  `Escape`, and `q`.
+- Open the subtle question-mark button in the status line for the complete,
+  always-current command and shortcut reference.
 - Select **Skip intro** to bypass the boot. Reduced-motion preferences shorten
   the transition automatically, and later visits in the same browser session
   open the workspace directly.

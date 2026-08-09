@@ -1,6 +1,6 @@
 "use client";
 
-import { GitBranch, PanelBottom, Terminal } from "lucide-react";
+import { CircleHelp, GitBranch, PanelBottom, Terminal } from "lucide-react";
 import { sectionById } from "./data";
 import type { PortfolioSectionId } from "./types";
 import styles from "./portfolio.module.css";
@@ -11,6 +11,7 @@ interface StatuslineProps {
   onToggleTerminal: () => void;
   inert?: boolean;
   mode: "NORMAL" | "COMMAND" | "TERMINAL";
+  onOpenHelp: () => void;
 }
 
 export function Statusline({
@@ -19,6 +20,7 @@ export function Statusline({
   onToggleTerminal,
   inert = false,
   mode,
+  onOpenHelp,
 }: StatuslineProps) {
   const section = sectionById[activeSection];
 
@@ -34,6 +36,15 @@ export function Statusline({
       </div>
       <div className={styles.statusRight}>
         <span className={styles.statusEncoding}>UTF-8</span>
+        <button
+          type="button"
+          className={styles.helpButton}
+          onClick={onOpenHelp}
+          aria-label="Open commands and shortcuts"
+          title="Commands and shortcuts"
+        >
+          <CircleHelp size={14} />
+        </button>
         <button
           type="button"
           className={terminalOpen ? styles.statusButtonActive : ""}

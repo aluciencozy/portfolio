@@ -10,6 +10,15 @@ export type NeovimCommandResult =
   | { type: "toggle-explorer" }
   | { type: "toggle-terminal" };
 
+export const neovimCommandHelp = [
+  { command: ":edit {file}", description: "Open a portfolio file" },
+  { command: ":quit / :bdelete", description: "Close the active buffer" },
+  { command: ":bnext / :bprevious", description: "Cycle open buffers" },
+  { command: ":terminal", description: "Open the terminal split" },
+  { command: ":Explore", description: "Focus the file explorer" },
+  { command: ":buffers", description: "List portfolio files" },
+] as const;
+
 function resolveSection(rawPath: string): PortfolioSectionId | null {
   const path = rawPath.trim().replace(/^\.\//, "").replace(/\/$/, "").toLowerCase();
   const file = path.split("/").at(-1) ?? path;

@@ -24,21 +24,27 @@ const rootFiles = [
   "contact.md",
 ];
 
+export const terminalCommandHelp = [
+  { command: "help", description: "Show terminal commands" },
+  { command: "pwd", description: "Print the virtual working directory" },
+  { command: "ls [path]", description: "List portfolio files" },
+  { command: "cd [path]", description: "Change directory and open its buffer" },
+  { command: "cat <file>", description: "Preview a portfolio file" },
+  { command: "about / projects", description: "Open a portfolio buffer" },
+  { command: "experience / skills", description: "Open a portfolio buffer" },
+  { command: "contact", description: "Open contact.md" },
+  { command: "resume / github", description: "Open an external portfolio link" },
+  { command: "linkedin", description: "Open LinkedIn" },
+  { command: "whoami", description: "Print a short introduction" },
+  { command: "clear", description: "Clear terminal history" },
+  { command: "exit", description: "Close the terminal split" },
+] as const;
+
 const helpLines = [
   "Available commands:",
-  "  help                 show this command list",
-  "  pwd                  print the virtual working directory",
-  "  ls [path]            list portfolio files",
-  "  cd [path]            change directory and open its buffer",
-  "  cat <file>           preview a portfolio file",
-  "  about | projects     open a portfolio buffer",
-  "  experience | skills open a portfolio buffer",
-  "  contact              open contact.md",
-  "  resume | github      open an external portfolio link",
-  "  linkedin             open LinkedIn",
-  "  whoami               print a short introduction",
-  "  clear                clear terminal history",
-  "  exit                 close the terminal split",
+  ...terminalCommandHelp.map(
+    ({ command, description }) => `  ${command.padEnd(21)}${description.toLowerCase()}`,
+  ),
   "",
   "Tip: use Arrow Up and Arrow Down to recall commands.",
 ];

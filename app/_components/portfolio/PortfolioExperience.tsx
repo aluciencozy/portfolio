@@ -40,6 +40,7 @@ export function PortfolioExperience() {
   const [commandLineOpen, setCommandLineOpen] = useState(false);
   const [commandMessage, setCommandMessage] = useState("");
   const [commandMessageTone, setCommandMessageTone] = useState<"default" | "error">("default");
+  const [explorerFocusRequest, setExplorerFocusRequest] = useState(0);
   const entryId = useRef(1);
   const collapseTimer = useRef<number | undefined>(undefined);
   const bootFinished = useRef(false);
@@ -128,6 +129,11 @@ export function PortfolioExperience() {
     }
   }, []);
 
+  const focusExplorer = useCallback(() => {
+    dispatch({ type: "set-explorer", open: true });
+    setExplorerFocusRequest((request) => request + 1);
+  }, []);
+
   const handleNeovimAction = useCallback(
     (action: NeovimAction) => {
       const content = document.getElementById("portfolio-scroll-content");
@@ -163,14 +169,14 @@ export function PortfolioExperience() {
           cycleBuffer(-1);
           break;
         case "toggle-explorer":
-          dispatch({ type: "toggle-explorer" });
+          focusExplorer();
           break;
         case "toggle-terminal":
           dispatch({ type: "toggle-terminal" });
           break;
       }
     },
-    [cycleBuffer, reducedMotion],
+    [cycleBuffer, focusExplorer, reducedMotion],
   );
 
   useNeovimKeymaps({
@@ -190,7 +196,7 @@ export function PortfolioExperience() {
           break;
         case "close-buffer":
           if (state.activeSection === "overview") {
-            showCommandMessage("E444: Cannot close the last portfolio buffer", "error");
+            showCommandMessage("Cannot close README.md - this buffer is pinned", "error");
           } else {
             closeBuffer(state.activeSection);
           }
@@ -205,14 +211,14 @@ export function PortfolioExperience() {
           dispatch({ type: "set-terminal", open: true });
           break;
         case "toggle-explorer":
-          dispatch({ type: "toggle-explorer" });
+          focusExplorer();
           break;
         case "message":
           showCommandMessage(result.message, result.tone);
           break;
       }
     },
-    [closeBuffer, cycleBuffer, navigate, showCommandMessage, state.activeSection],
+    [closeBuffer, cycleBuffer, focusExplorer, navigate, showCommandMessage, state.activeSection],
   );
 
   const completeBoot = useCallback(() => {
@@ -303,7 +309,10 @@ export function PortfolioExperience() {
               onNavigate={navigate}
               onCloseBuffer={closeBuffer}
               onToggleFolder={(section) => dispatch({ type: "toggle-folder", section })}
-              onToggleExplorer={() => dispatch({ type: "toggle-explorer" })}
+              onToggleExplorer={() => {
+                if (state.explorerOpen) dispatch({ type: "set-explorer", open: false });
+                else focusExplorer();
+              }}
               onCloseExplorer={() => dispatch({ type: "set-explorer", open: false })}
               onToggleTerminal={() => dispatch({ type: "toggle-terminal" })}
               onTerminalCommand={handleTerminalCommand}
@@ -312,6 +321,7 @@ export function PortfolioExperience() {
               commandMessageTone={commandMessageTone}
               onCancelCommandLine={() => setCommandLineOpen(false)}
               onNeovimCommand={handleNeovimCommand}
+              explorerFocusRequest={explorerFocusRequest}
             />
           )}
         </AnimatePresence>

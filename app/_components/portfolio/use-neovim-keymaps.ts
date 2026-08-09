@@ -30,6 +30,7 @@ export function useNeovimKeymaps({ enabled, onAction }: UseNeovimKeymapsOptions)
     const handleKeyDown = (event: KeyboardEvent) => {
       if (isEditableTarget(event.target) || event.metaKey || event.altKey) return;
       const key = normalizeNeovimKey(event);
+      if (!key) return;
       let candidate = [...sequence.current, key];
       let matches = neovimKeymaps.filter((mapping) =>
         candidate.every((part, index) => mapping.keys[index] === part),
