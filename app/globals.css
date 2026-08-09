@@ -29,8 +29,8 @@
   --ctp-crust: #11111b;
 
   /* Change these two values to tune or remove the glass treatment. */
-  --glass-opacity: 0.95;
-  --glass-blur: 18px;
+  --glass-opacity: 0.85;
+  --glass-blur: 16px;
 
   --background: var(--ctp-crust);
   --foreground: var(--ctp-text);

@@ -40,15 +40,27 @@ function ProfileVisual() {
       aria-label="Visual profile card for Alex Cosentino, a software developer in Orlando"
     >
       <div className={styles.visualTitlebar} aria-hidden="true">
-        <span /><span /><span />
+        <span />
+        <span />
+        <span />
         <small>profile.ts</small>
       </div>
-      <div className={styles.profileMonogram} aria-hidden="true">AC</div>
+      <div className={styles.profileMonogram} aria-hidden="true">
+        AC
+      </div>
       <div className={styles.profileCode} aria-hidden="true">
-        <span><i>const</i> developer = {"{"}</span>
-        <span>name: <strong>&quot;Alex Cosentino&quot;</strong>,</span>
-        <span>focus: <strong>&quot;full-stack systems&quot;</strong>,</span>
-        <span>location: <strong>&quot;Orlando, FL&quot;</strong></span>
+        <span>
+          <i>const</i> developer = {"{"}
+        </span>
+        <span>
+          name: <strong>&quot;Alex Cosentino&quot;</strong>,
+        </span>
+        <span>
+          focus: <strong>&quot;full-stack systems&quot;</strong>,
+        </span>
+        <span>
+          location: <strong>&quot;Orlando, FL&quot;</strong>
+        </span>
         <span>{"}"};</span>
       </div>
     </div>
@@ -64,13 +76,19 @@ function ProjectVisual({
 }) {
   if (project.image) {
     return (
-      <div className={`${styles.mediaSlot} ${styles.mediaSlotCompact} ${styles.projectScreenshot}`}>
+      <div
+        className={`${styles.mediaSlot} ${styles.mediaSlotCompact} ${styles.projectScreenshot}`}
+      >
         <Image
           src={project.image}
           alt={`${project.title} project screenshot`}
           fill
           sizes="(max-width: 800px) 100vw, 38vw"
-          className={project.imageFit === "contain" ? styles.projectImageContain : undefined}
+          className={
+            project.imageFit === "contain"
+              ? styles.projectImageContain
+              : undefined
+          }
         />
       </div>
     );
@@ -84,19 +102,27 @@ function ProjectVisual({
       aria-label={`${project.title} project visual summary`}
     >
       <div className={styles.visualTitlebar} aria-hidden="true">
-        <span /><span /><span />
+        <span />
+        <span />
+        <span />
         <small>project-0{index + 1}.tsx</small>
       </div>
       <div className={styles.projectVisualBody} aria-hidden="true">
         <div className={styles.projectVisualHeading}>
-          <span><GitBranch size={12} /> main</span>
+          <span>
+            <GitBranch size={12} /> main
+          </span>
           <strong>{project.title}</strong>
         </div>
         <div className={styles.projectVisualPanels}>
-          <span /><span /><span />
+          <span />
+          <span />
+          <span />
         </div>
         <div className={styles.projectVisualStack}>
-          {project.tags.slice(0, 4).map((tag) => <span key={tag}>{tag}</span>)}
+          {project.tags.slice(0, 4).map((tag) => (
+            <span key={tag}>{tag}</span>
+          ))}
         </div>
       </div>
     </div>
@@ -137,12 +163,14 @@ function Overview({ onNavigate }: Pick<ContentPanelProps, "onNavigate">) {
           <h1>
             Alex Cosentino<span>.</span>
           </h1>
-          <h2>I build reliable full-stack systems with product-minded detail.</h2>
+          <h2>
+            I build reliable full-stack systems with product-minded detail.
+          </h2>
           <p className={styles.heroDescription}>
             Software developer and computer science student focused on type-safe
             web applications, data systems, cloud delivery, and developer
-            experience. Currently building healthcare credentialing software
-            at Vesta Teleradiology.
+            experience. Currently building healthcare credentialing software at
+            Vesta Teleradiology.
           </p>
           <div className={styles.heroActions}>
             <button type="button" onClick={() => onNavigate("projects")}>
@@ -170,10 +198,22 @@ function Overview({ onNavigate }: Pick<ContentPanelProps, "onNavigate">) {
       </div>
 
       <div className={styles.metricsGrid} aria-label="Career highlights">
-        <div><strong>50K+</strong><span>records migrated with zero data loss</span></div>
-        <div><strong>10+</strong><span>automated migration scripts</span></div>
-        <div><strong>{projects.length}</strong><span>featured software projects</span></div>
-        <div><strong>4.0</strong><span>computer science GPA</span></div>
+        <div>
+          <strong>50K+</strong>
+          <span>records migrated with zero data loss</span>
+        </div>
+        <div>
+          <strong>10+</strong>
+          <span>automated migration scripts</span>
+        </div>
+        <div>
+          <strong>{projects.length}</strong>
+          <span>featured software projects</span>
+        </div>
+        <div>
+          <strong>4.0</strong>
+          <span>computer science GPA</span>
+        </div>
       </div>
 
       <section className={styles.featuredSection}>
@@ -218,9 +258,9 @@ function About() {
       <div className={styles.aboutGrid}>
         <div className={styles.proseCard}>
           <p>
-            I&apos;m Alex, a software developer pursuing a B.S. in Computer Science
-            at the University of Central Florida while working on production
-            healthcare software at Vesta Teleradiology.
+            I&apos;m Alex, a software developer pursuing a B.S. in Computer
+            Science at the University of Central Florida while working on
+            production healthcare software at Vesta Teleradiology.
           </p>
           <p>
             My recent work spans large data migrations, type-safe full-stack
@@ -235,19 +275,46 @@ function About() {
           </p>
         </div>
         <div className={styles.educationCard}>
-          <div className={styles.cardIcon}><GraduationCap size={19} /></div>
+          <div className={styles.cardIcon}>
+            <GraduationCap size={19} />
+          </div>
           <span>EDUCATION</span>
           <h3>{education.institution}</h3>
           <p>{education.degree}</p>
-          <div><BookOpen size={14} /> {education.gpa}</div>
-          <div><MapPin size={14} /> {education.location}</div>
+          <div>
+            <BookOpen size={14} /> {education.gpa}
+          </div>
+          <div>
+            <MapPin size={14} /> {education.location}
+          </div>
           <small>{education.period}</small>
         </div>
       </div>
       <div className={styles.valueGrid}>
-        <article><span>01</span><h3>Robust by default</h3><p>Data integrity, useful types, clear boundaries, and failure modes designed before launch.</p></article>
-        <article><span>02</span><h3>Product-aware development</h3><p>Technical decisions grounded in how people actually use and maintain the system.</p></article>
-        <article><span>03</span><h3>Always improving</h3><p>Curiosity applied equally to systems, tooling, visual polish, and team communication.</p></article>
+        <article>
+          <span>01</span>
+          <h3>Robust by default</h3>
+          <p>
+            Data integrity, useful types, clear boundaries, and failure modes
+            designed before launch.
+          </p>
+        </article>
+        <article>
+          <span>02</span>
+          <h3>Product-aware development</h3>
+          <p>
+            Technical decisions grounded in how people actually use and maintain
+            the system.
+          </p>
+        </article>
+        <article>
+          <span>03</span>
+          <h3>Always improving</h3>
+          <p>
+            Curiosity applied equally to systems, tooling, visual polish, and
+            team communication.
+          </p>
+        </article>
       </div>
     </div>
   );
@@ -280,7 +347,9 @@ function Experience() {
                 </div>
               </div>
               <ul>
-                {entry.highlights.map((highlight) => <li key={highlight}>{highlight}</li>)}
+                {entry.highlights.map((highlight) => (
+                  <li key={highlight}>{highlight}</li>
+                ))}
               </ul>
             </div>
           </article>
@@ -290,7 +359,13 @@ function Experience() {
   );
 }
 
-function ProjectCard({ project, index }: { project: PortfolioProject; index: number }) {
+function ProjectCard({
+  project,
+  index,
+}: {
+  project: PortfolioProject;
+  index: number;
+}) {
   return (
     <article className={styles.projectCard} data-accent={project.accent}>
       <div className={styles.projectMedia}>
@@ -328,10 +403,14 @@ function ProjectCard({ project, index }: { project: PortfolioProject; index: num
         <h2>{project.title}</h2>
         <p>{project.description}</p>
         <ul>
-          {project.highlights.map((highlight) => <li key={highlight}>{highlight}</li>)}
+          {project.highlights.map((highlight) => (
+            <li key={highlight}>{highlight}</li>
+          ))}
         </ul>
         <div className={styles.tagList}>
-          {project.tags.map((tag) => <span key={tag}>{tag}</span>)}
+          {project.tags.map((tag) => (
+            <span key={tag}>{tag}</span>
+          ))}
         </div>
       </div>
     </article>
@@ -372,19 +451,29 @@ function Skills() {
       />
       <div className={styles.skillsEditor}>
         <div className={styles.codeGutter} aria-hidden="true">
-          {Array.from({ length: 18 }, (_, index) => <span key={index}>{index + 1}</span>)}
+          {Array.from({ length: 18 }, (_, index) => (
+            <span key={index}>{index + 1}</span>
+          ))}
         </div>
         <div className={styles.skillsCode}>
           <span className={styles.syntaxPunctuation}>{"{"}</span>
           {categories.map(([label, items], categoryIndex) => (
             <div className={styles.skillCodeBlock} key={label}>
-              <div><span className={styles.syntaxKey}>&quot;{label}&quot;</span><span className={styles.syntaxPunctuation}>: [</span></div>
+              <div>
+                <span className={styles.syntaxKey}>&quot;{label}&quot;</span>
+                <span className={styles.syntaxPunctuation}>: [</span>
+              </div>
               <div className={styles.skillTokens}>
                 {items.map((item, index) => (
-                  <span key={item}><i>&quot;{item}&quot;</i>{index < items.length - 1 ? "," : ""}</span>
+                  <span key={item}>
+                    <i>&quot;{item}&quot;</i>
+                    {index < items.length - 1 ? "," : ""}
+                  </span>
                 ))}
               </div>
-              <div className={styles.syntaxPunctuation}>]{categoryIndex < categories.length - 1 ? "," : ""}</div>
+              <div className={styles.syntaxPunctuation}>
+                ]{categoryIndex < categories.length - 1 ? "," : ""}
+              </div>
             </div>
           ))}
           <span className={styles.syntaxPunctuation}>{"}"}</span>
@@ -408,8 +497,9 @@ function Contact() {
         <span>CONTACT.MD</span>
         <h1>Let&apos;s build something thoughtful.</h1>
         <p>
-          I&apos;m always happy to talk about software development opportunities,
-          ambitious products, developer tooling, or a particularly good Neovim setup.
+          I&apos;m always happy to talk about software development
+          opportunities, ambitious products, developer tooling, or a
+          particularly good terminal setup.
         </p>
       </div>
       <div className={styles.contactGrid}>
@@ -422,8 +512,13 @@ function Contact() {
               target={link.type === "email" ? undefined : "_blank"}
               rel={link.type === "email" ? undefined : "noreferrer"}
             >
-              <span><Icon size={18} /></span>
-              <div><small>{link.type}</small><strong>{link.label}</strong></div>
+              <span>
+                <Icon size={18} />
+              </span>
+              <div>
+                <small>{link.type}</small>
+                <strong>{link.label}</strong>
+              </div>
               <ExternalLink size={14} />
             </a>
           );

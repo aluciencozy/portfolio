@@ -115,7 +115,14 @@ export const projects: PortfolioProject[] = [
     title: "FE Arena",
     description:
       "An unofficial UCF Foundation Exam study platform with solo practice, public matchmaking, private rooms, and browser-based C coding rounds.",
-    tags: ["React", "TypeScript", "Socket.io", "Node.js", "Supabase", "WebAssembly"],
+    tags: [
+      "React",
+      "TypeScript",
+      "Socket.io",
+      "Node.js",
+      "Supabase",
+      "WebAssembly",
+    ],
     status: "In development · 2026",
     accent: "blue",
     href: "https://github.com/aluciencozy/fe-arena",
@@ -160,7 +167,7 @@ export const experience: ExperienceEntry[] = [
     role: "Food and Beverage Attendant",
     organization: "Hilton Food and Beverage",
     location: "Sanford, FL",
-    period: "Jun 2024 - Present",
+    period: "Jun 2024 - Aug 2026",
     highlights: [
       "Deliver high-efficiency customer service in a fast-paced environment while coordinating inventory and resolving guest issues across teams.",
     ],
@@ -216,14 +223,7 @@ export const skills = {
     "Webhooks",
     "Socket.io",
   ],
-  tools: [
-    "GCP",
-    "AWS",
-    "Docker",
-    "GitHub Actions",
-    "Git",
-    "n8n",
-  ],
+  tools: ["GCP", "AWS", "Docker", "GitHub Actions", "Git", "n8n"],
 };
 
 export const sectionById = Object.fromEntries(
