@@ -63,7 +63,7 @@ function ProjectVisual({
 }) {
   if (project.image) {
     return (
-      <div className={`${styles.mediaSlot} ${styles.mediaSlotCompact}`}>
+      <div className={`${styles.mediaSlot} ${styles.mediaSlotCompact} ${styles.projectScreenshot}`}>
         <Image
           src={project.image}
           alt={`${project.title} project screenshot`}

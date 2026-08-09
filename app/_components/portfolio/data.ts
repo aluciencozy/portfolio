@@ -46,7 +46,7 @@ export const sections: PortfolioSection[] = [
       { label: "Vesta Credentialing", fileName: "vesta-credentialing.ts" },
       { label: "Demonlist Ultimate", fileName: "demonlist-ultimate.ts" },
       { label: "Git Janitor", fileName: "git-janitor.ts" },
-      { label: "Guess the OST", fileName: "guess-the-ost.ts" },
+      { label: "FE Arena", fileName: "fe-arena.ts" },
       { label: "AniFind", fileName: "anifind.ts" },
     ],
   },
@@ -112,16 +112,16 @@ export const projects: PortfolioProject[] = [
     ],
   },
   {
-    title: "Guess the OST",
+    title: "FE Arena",
     description:
-      "A real-time multiplayer music guessing game with synchronized lobbies, chat, playback, and animated feedback.",
-    tags: ["React", "Node.js", "Socket.io", "Motion"],
+      "An unofficial UCF Foundation Exam study platform with solo practice, public matchmaking, private rooms, and browser-based C coding rounds.",
+    tags: ["React", "TypeScript", "Socket.io", "Node.js", "Supabase", "WebAssembly"],
     status: "In development · 2026",
     accent: "blue",
-    href: "https://github.com/aluciencozy/guess-the-ost",
+    href: "https://github.com/aluciencozy/fe-arena",
     highlights: [
-      "Low-latency bidirectional client-server communication",
-      "Synchronized game state across active multiplayer lobbies",
+      "Server-authoritative five-round matches with queueing, rematches, chat, deadline-safe state transitions, and reconnect recovery",
+      "Original multi-format question bank plus timed browser-only C execution inside prewarmed WebAssembly workers",
     ],
   },
   {

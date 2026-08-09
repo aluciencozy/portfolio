@@ -950,6 +950,21 @@
   background: rgb(17 17 27 / 0.72);
 }
 
+.projectScreenshot > img {
+  filter: saturate(0.78) brightness(0.9) contrast(0.95);
+}
+
+.projectScreenshot::after {
+  position: absolute;
+  z-index: 1;
+  inset: 0;
+  background:
+    linear-gradient(135deg, rgb(137 180 250 / 0.09), rgb(203 166 247 / 0.11)),
+    rgb(30 30 46 / 0.08);
+  content: "";
+  pointer-events: none;
+}
+
 .visualTitlebar {
   position: absolute;
   z-index: 2;
