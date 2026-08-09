@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import { motion } from "motion/react";
+import { useRef } from "react";
 import {
   ArrowRight,
   BookOpen,
@@ -14,6 +15,7 @@ import {
   Mail,
   MapPin,
 } from "lucide-react";
+import { EditorScrollbar } from "./EditorScrollbar";
 import {
   education,
   experience,
@@ -438,10 +440,13 @@ function Contact() {
 
 export function ContentPanel({ activeSection, onNavigate }: ContentPanelProps) {
   const section = sectionById[activeSection];
+  const scrollRef = useRef<HTMLElement>(null);
 
   return (
     <main className={styles.editorViewport} id="portfolio-content">
       <motion.article
+        ref={scrollRef}
+        id="portfolio-scroll-content"
         key={activeSection}
         className={styles.editorScroll}
         aria-label={section.label}
@@ -456,6 +461,7 @@ export function ContentPanel({ activeSection, onNavigate }: ContentPanelProps) {
         {activeSection === "skills" && <Skills />}
         {activeSection === "contact" && <Contact />}
       </motion.article>
+      <EditorScrollbar contentKey={activeSection} scrollRef={scrollRef} />
     </main>
   );
 }

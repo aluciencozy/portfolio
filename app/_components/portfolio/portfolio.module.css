@@ -817,12 +817,57 @@
   height: 100%;
   overflow: auto;
   scrollbar-color: var(--ctp-surface1) transparent;
-  scrollbar-width: thin;
+  scrollbar-width: none;
 }
+
+.editorScroll::-webkit-scrollbar { display: none; }
+
+.editorScrollRail {
+  position: absolute;
+  z-index: 3;
+  top: 8px;
+  right: 3px;
+  bottom: 8px;
+  width: 10px;
+  border-radius: 999px;
+  background: rgb(49 50 68 / 0.2);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 160ms ease, background-color 160ms ease;
+  touch-action: none;
+}
+
+.editorScrollRailVisible {
+  opacity: 0.58;
+  pointer-events: auto;
+}
+
+.editorScrollRailVisible:hover,
+.editorScrollRailVisible:focus-visible {
+  background: rgb(49 50 68 / 0.38);
+  opacity: 1;
+}
+
+.editorScrollRail:focus-visible {
+  outline: 1px solid rgb(180 190 254 / 0.72);
+  outline-offset: 1px;
+}
+
+.editorScrollThumb {
+  width: 6px;
+  min-height: 36px;
+  margin-inline: auto;
+  border-radius: 999px;
+  background: rgb(69 71 90 / 0.88);
+  cursor: grab;
+  transition: background-color 160ms ease;
+}
+
+.editorScrollThumb:hover { background: var(--ctp-surface2); }
+.editorScrollThumb:active { cursor: grabbing; }
 
 .fallbackStage::-webkit-scrollbar-button,
 .fileTree::-webkit-scrollbar-button,
-.editorScroll::-webkit-scrollbar-button,
 .terminalHistory::-webkit-scrollbar-button {
   width: 0;
   height: 0;
