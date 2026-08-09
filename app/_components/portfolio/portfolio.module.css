@@ -1072,23 +1072,33 @@
   padding: 48px 22px 25px;
 }
 
-.profileMonogram {
+.profilePortrait {
   position: relative;
   z-index: 1;
-  display: grid;
   width: clamp(86px, 9vw, 126px);
   aspect-ratio: 1;
-  place-items: center;
+  overflow: hidden;
   border: 1px solid rgb(203 166 247 / 0.42);
   border-radius: 50%;
-  color: var(--ctp-crust);
-  background: linear-gradient(145deg, var(--ctp-pink), var(--ctp-mauve));
+  background: var(--ctp-surface0);
   box-shadow:
     0 0 0 9px rgb(203 166 247 / 0.06),
     0 18px 45px rgb(17 17 27 / 0.45);
-  font-size: clamp(1.8rem, 3vw, 3rem);
-  font-weight: 800;
-  letter-spacing: -0.08em;
+}
+
+.profilePortrait > img {
+  object-fit: cover;
+  filter: saturate(0.78) brightness(0.9) contrast(0.97);
+}
+
+.profilePortrait::after {
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(145deg, rgb(137 180 250 / 0.1), rgb(203 166 247 / 0.14)),
+    rgb(30 30 46 / 0.06);
+  content: "";
+  pointer-events: none;
 }
 
 .profileCode {
