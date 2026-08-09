@@ -5,7 +5,7 @@ export function StaticPortfolio() {
   return (
     <main className={styles.fallbackDocument}>
       <header className={styles.fallbackHero}>
-        <span>Software Engineer · Orlando, Florida</span>
+        <span>Software Developer · Orlando, Florida</span>
         <h1>Alex Cosentino</h1>
         <p>
           I build reliable full-stack systems with product-minded detail,
@@ -44,6 +44,12 @@ export function StaticPortfolio() {
               <h3>{project.title}</h3>
               <p>{project.description}</p>
               <small>{project.tags.join(" · ")}</small>
+              {(project.href || project.liveHref) && (
+                <div className={styles.fallbackProjectLinks}>
+                  {project.href && <a href={project.href}>Source</a>}
+                  {project.liveHref && <a href={project.liveHref}>Live project</a>}
+                </div>
+              )}
             </article>
           ))}
         </div>

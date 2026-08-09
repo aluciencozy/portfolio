@@ -38,7 +38,9 @@ export interface PortfolioProject {
   status: string;
   accent: AccentColor;
   href?: string;
+  liveHref?: string;
   image?: string;
+  imageFit?: "cover" | "contain";
   highlights: string[];
 }
 

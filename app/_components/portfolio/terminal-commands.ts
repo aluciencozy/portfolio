@@ -34,7 +34,7 @@ export function runTerminalCommand(rawCommand: string): TerminalCommandResult {
         type: "print",
         tone: "success",
         lines: [
-          "Alex Cosentino - Software Engineer",
+          "Alex Cosentino - Software Developer",
           "I build thoughtful, reliable software with a sharp eye for developer experience.",
         ],
       };

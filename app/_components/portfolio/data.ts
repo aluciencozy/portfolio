@@ -43,9 +43,11 @@ export const sections: PortfolioSection[] = [
     kind: "folder",
     accent: "green",
     children: [
-      { label: "Featured project", fileName: "featured-project.ts" },
-      { label: "Case study", fileName: "case-study.tsx" },
-      { label: "Developer tool", fileName: "developer-tool.lua" },
+      { label: "Vesta Credentialing", fileName: "vesta-credentialing.ts" },
+      { label: "Demonlist Ultimate", fileName: "demonlist-ultimate.ts" },
+      { label: "Git Janitor", fileName: "git-janitor.ts" },
+      { label: "FE Arena", fileName: "fe-arena.ts" },
+      { label: "AniFind", fileName: "anifind.ts" },
     ],
   },
   {
@@ -87,29 +89,70 @@ export const projects: PortfolioProject[] = [
     status: "Shipped · 2025–2026",
     accent: "mauve",
     href: "https://github.com/aluciencozy/demonlist",
+    image: "/projects/demonlist-ultimate.png",
     highlights: [
       "Containerized backend on EC2 with media storage through S3",
       "Gemini-powered assistant and a frontend deployed through AWS Amplify",
     ],
   },
   {
-    title: "Guess the OST",
+    title: "Git Janitor",
     description:
-      "A real-time multiplayer music guessing game with synchronized lobbies, chat, playback, and animated feedback.",
-    tags: ["React", "Node.js", "Socket.io", "Motion"],
+      "A published interactive CLI that makes local and remote Git repository maintenance safer, faster, and easier to understand.",
+    tags: ["TypeScript", "Node.js", "npm", "Git"],
+    status: "Published · npm package",
+    accent: "teal",
+    href: "https://github.com/aluciencozy/git-janitor",
+    liveHref: "https://www.npmjs.com/package/@alcozy/git-janitor",
+    image: "/projects/git-janitor.png",
+    imageFit: "contain",
+    highlights: [
+      "Keyboard-navigated workflows for pruning merged branches, syncing remotes, and inspecting active branches",
+      "Published globally through npm with guardrails around destructive Git operations",
+    ],
+  },
+  {
+    title: "FE Arena",
+    description:
+      "An unofficial UCF Foundation Exam study platform with solo practice, public matchmaking, private rooms, and browser-based C coding rounds.",
+    tags: [
+      "React",
+      "TypeScript",
+      "Socket.io",
+      "Node.js",
+      "Supabase",
+      "WebAssembly",
+    ],
     status: "In development · 2026",
     accent: "blue",
-    href: "https://github.com/aluciencozy/guess-the-ost",
+    href: "https://github.com/aluciencozy/fe-arena",
+    image: "/projects/fe-arena.png",
     highlights: [
-      "Low-latency bidirectional client-server communication",
-      "Synchronized game state across active multiplayer lobbies",
+      "Server-authoritative five-round matches with queueing, rematches, chat, deadline-safe state transitions, and reconnect recovery",
+      "Original multi-format question bank plus timed browser-only C execution inside prewarmed WebAssembly workers",
+    ],
+  },
+  {
+    title: "AniFind",
+    description:
+      "A full-stack anime discovery platform where users can search titles, explore current favorites, and manage a personal watchlist.",
+    tags: ["React", "Node.js", "Express", "MongoDB", "JWT", "AniList API"],
+    status: "Shipped · Full-stack app",
+    accent: "green",
+    href: "https://github.com/aluciencozy/anifind-fullstack",
+    liveHref: "https://anifind-fullstack.vercel.app/",
+    image: "/projects/anifind.png",
+    imageFit: "contain",
+    highlights: [
+      "Secure REST API with JWT authentication and MongoDB-backed watchlist CRUD operations",
+      "Responsive React interface combining the custom backend with the AniList GraphQL API",
     ],
   },
 ];
 
 export const experience: ExperienceEntry[] = [
   {
-    role: "Software Engineering Intern",
+    role: "Software Developer Intern",
     organization: "Vesta Teleradiology",
     location: "Lake Mary, FL",
     period: "Feb 2026 - Present",
@@ -124,7 +167,7 @@ export const experience: ExperienceEntry[] = [
     role: "Food and Beverage Attendant",
     organization: "Hilton Food and Beverage",
     location: "Sanford, FL",
-    period: "Jun 2024 - Present",
+    period: "Jun 2024 - Aug 2026",
     highlights: [
       "Deliver high-efficiency customer service in a fast-paced environment while coordinating inventory and resolving guest issues across teams.",
     ],
@@ -180,14 +223,7 @@ export const skills = {
     "Webhooks",
     "Socket.io",
   ],
-  tools: [
-    "GCP",
-    "AWS",
-    "Docker",
-    "GitHub Actions",
-    "Git",
-    "n8n",
-  ],
+  tools: ["GCP", "AWS", "Docker", "GitHub Actions", "Git", "n8n"],
 };
 
 export const sectionById = Object.fromEntries(

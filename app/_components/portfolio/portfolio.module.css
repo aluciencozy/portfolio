@@ -190,6 +190,18 @@
   line-height: 1.7;
 }
 
+.fallbackProjectLinks {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 14px;
+  margin-top: 16px;
+}
+
+.fallbackProjectLinks a {
+  color: var(--ctp-blue);
+  font-size: 0.68rem;
+}
+
 .workspace,
 .bootTerminal {
   width: min(100%, 2400px);
@@ -617,6 +629,15 @@
   color: var(--ctp-blue);
 }
 
+.typeScriptIcon {
+  width: 14px;
+  height: 14px;
+  flex: 0 0 14px;
+  background: var(--ctp-blue);
+  -webkit-mask: url("/typescript.svg") center / contain no-repeat;
+  mask: url("/typescript.svg") center / contain no-repeat;
+}
+
 .explorerFooter {
   border-top: 1px solid rgb(88 91 112 / 0.24);
   padding: 13px 14px 15px;
@@ -796,7 +817,61 @@
   height: 100%;
   overflow: auto;
   scrollbar-color: var(--ctp-surface1) transparent;
-  scrollbar-width: thin;
+  scrollbar-width: none;
+}
+
+.editorScroll::-webkit-scrollbar { display: none; }
+
+.editorScrollRail {
+  position: absolute;
+  z-index: 3;
+  top: 8px;
+  right: 3px;
+  bottom: 8px;
+  width: 10px;
+  border-radius: 999px;
+  background: rgb(49 50 68 / 0.2);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 160ms ease, background-color 160ms ease;
+  touch-action: none;
+}
+
+.editorScrollRailVisible {
+  opacity: 0.58;
+  pointer-events: auto;
+}
+
+.editorScrollRailVisible:hover,
+.editorScrollRailVisible:focus-visible {
+  background: rgb(49 50 68 / 0.38);
+  opacity: 1;
+}
+
+.editorScrollRail:focus-visible {
+  outline: 1px solid rgb(180 190 254 / 0.72);
+  outline-offset: 1px;
+}
+
+.editorScrollThumb {
+  width: 6px;
+  min-height: 36px;
+  margin-inline: auto;
+  border-radius: 999px;
+  background: rgb(69 71 90 / 0.88);
+  cursor: grab;
+  transition: background-color 160ms ease;
+}
+
+.editorScrollThumb:hover { background: var(--ctp-surface2); }
+.editorScrollThumb:active { cursor: grabbing; }
+
+.fallbackStage::-webkit-scrollbar-button,
+.fileTree::-webkit-scrollbar-button,
+.terminalHistory::-webkit-scrollbar-button {
+  width: 0;
+  height: 0;
+  display: none;
 }
 
 .overview,
@@ -932,6 +1007,27 @@
 
 .mediaSlot > img { object-fit: cover; }
 
+.mediaSlot > img.projectImageContain {
+  object-fit: contain;
+  padding: clamp(10px, 1.6vw, 20px);
+  background: rgb(17 17 27 / 0.72);
+}
+
+.projectScreenshot > img {
+  filter: saturate(0.78) brightness(0.9) contrast(0.95);
+}
+
+.projectScreenshot::after {
+  position: absolute;
+  z-index: 1;
+  inset: 0;
+  background:
+    linear-gradient(135deg, rgb(137 180 250 / 0.09), rgb(203 166 247 / 0.11)),
+    rgb(30 30 46 / 0.08);
+  content: "";
+  pointer-events: none;
+}
+
 .visualTitlebar {
   position: absolute;
   z-index: 2;
@@ -976,23 +1072,48 @@
   padding: 48px 22px 25px;
 }
 
-.profileMonogram {
+.asciiPortrait {
   position: relative;
   z-index: 1;
   display: grid;
-  width: clamp(86px, 9vw, 126px);
-  aspect-ratio: 1;
+  width: 100%;
+  min-height: clamp(126px, 10vw, 158px);
+  overflow: hidden;
   place-items: center;
-  border: 1px solid rgb(203 166 247 / 0.42);
-  border-radius: 50%;
-  color: var(--ctp-crust);
-  background: linear-gradient(145deg, var(--ctp-pink), var(--ctp-mauve));
+  border-block: 1px solid rgb(180 190 254 / 0.12);
+  background:
+    radial-gradient(circle at 50% 42%, rgb(203 166 247 / 0.1), transparent 58%),
+    rgb(17 17 27 / 0.16);
   box-shadow:
-    0 0 0 9px rgb(203 166 247 / 0.06),
-    0 18px 45px rgb(17 17 27 / 0.45);
-  font-size: clamp(1.8rem, 3vw, 3rem);
-  font-weight: 800;
-  letter-spacing: -0.08em;
+    inset 0 1px rgb(255 255 255 / 0.02),
+    0 18px 45px rgb(17 17 27 / 0.28);
+}
+
+.asciiPortrait pre {
+  margin: 0;
+  color: transparent;
+  background: linear-gradient(
+    155deg,
+    var(--ctp-lavender) 6%,
+    var(--ctp-mauve) 48%,
+    var(--ctp-blue) 92%
+  );
+  background-clip: text;
+  font: 700 clamp(4.4px, 0.4vw, 5.8px) / 0.86 "JetBrains Mono", monospace;
+  letter-spacing: 0;
+  white-space: pre;
+  filter: drop-shadow(0 8px 18px rgb(17 17 27 / 0.54));
+}
+
+@media (min-width: 1051px) {
+  .profileVisual { aspect-ratio: 2 / 3; }
+
+  .asciiPortrait { min-height: clamp(150px, 11vw, 180px); }
+
+  .asciiPortrait pre {
+    font-size: clamp(5.4px, 0.44vw, 6.6px);
+    line-height: 0.86;
+  }
 }
 
 .profileCode {
@@ -1016,6 +1137,7 @@
 .projectVisual[data-accent="green"] { --visual-accent: var(--ctp-green); }
 .projectVisual[data-accent="mauve"] { --visual-accent: var(--ctp-mauve); }
 .projectVisual[data-accent="blue"] { --visual-accent: var(--ctp-blue); }
+.projectVisual[data-accent="teal"] { --visual-accent: var(--ctp-teal); }
 
 .projectVisualBody {
   position: absolute;
@@ -1183,6 +1305,7 @@
 .projectPreview[data-accent="green"] { --card-accent: var(--ctp-green); }
 .projectPreview[data-accent="mauve"] { --card-accent: var(--ctp-mauve); }
 .projectPreview[data-accent="blue"] { --card-accent: var(--ctp-blue); }
+.projectPreview[data-accent="teal"] { --card-accent: var(--ctp-teal); }
 .projectPreview > span { color: var(--card-accent); font-size: 0.62rem; }
 .projectPreview h4 { margin: 30px 0 10px; font-size: 0.82rem; }
 .projectPreview p { margin: 0; color: var(--ctp-subtext0); font-size: 0.64rem; line-height: 1.7; }
@@ -1213,6 +1336,10 @@
 .educationCard p { margin: 0 0 24px; color: var(--ctp-subtext0); font-size: 0.68rem; line-height: 1.6; }
 .educationCard > div:not(.cardIcon) { display: flex; align-items: center; gap: 8px; margin-top: 9px; color: var(--ctp-subtext1); font-size: 0.63rem; }
 .educationCard > div svg { color: var(--ctp-green); }
+.educationCard > .cardIcon svg {
+  color: var(--ctp-crust);
+  stroke-width: 2.3;
+}
 .educationCard small { display: block; margin-top: 18px; color: var(--ctp-overlay0); font-size: 0.57rem; }
 
 .valueGrid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; margin-top: clamp(4rem, 8vh, 7rem); }
@@ -1241,11 +1368,22 @@
 .projectCard[data-accent="green"] { --project-accent: var(--ctp-green); }
 .projectCard[data-accent="mauve"] { --project-accent: var(--ctp-mauve); }
 .projectCard[data-accent="blue"] { --project-accent: var(--ctp-blue); }
+.projectCard[data-accent="teal"] { --project-accent: var(--ctp-teal); }
 .projectMedia { position: relative; }
 .projectNumber { position: absolute; right: -8px; bottom: -12px; color: var(--project-accent); font-size: clamp(2rem, 4vw, 4.5rem); font-weight: 800; letter-spacing: -0.08em; opacity: 0.35; }
 .projectTopline { display: flex; align-items: center; justify-content: space-between; gap: 16px; }
 .projectTopline > span { color: var(--project-accent); font-size: 0.58rem; font-weight: 700; letter-spacing: 0.06em; }
-.projectTopline a { display: flex; align-items: center; gap: 4px; color: var(--ctp-subtext0); }
+.projectLinks { display: flex; align-items: center; gap: 7px; }
+.projectTopline a {
+  display: grid;
+  width: 30px;
+  height: 30px;
+  place-items: center;
+  border: 1px solid rgb(88 91 112 / 0.34);
+  border-radius: 7px;
+  color: var(--ctp-subtext0);
+  background: rgb(49 50 68 / 0.24);
+}
 .projectTopline a:hover { color: var(--project-accent); }
 .projectBody h2 { margin: 14px 0; font-size: clamp(1.25rem, 2vw, 2rem); letter-spacing: -0.035em; }
 .projectBody > p { margin: 0; color: var(--ctp-subtext0); font-size: 0.7rem; line-height: 1.8; }
@@ -1325,11 +1463,22 @@
 .gitStatus { display: flex; align-items: center; gap: 6px; color: var(--ctp-overlay1); }
 .statusRight > span,
 .statusRight button { display: flex; align-items: center; border: 0; padding: 0 12px; color: inherit; background: transparent; font: inherit; }
-.statusRight button { gap: 7px; cursor: pointer; }
-.statusRight button:hover,
-.statusRight .statusButtonActive { color: var(--ctp-crust); background: var(--ctp-green); }
+.statusRight button {
+  height: 24px;
+  align-self: center;
+  gap: 7px;
+  margin-right: 4px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+.statusRight button:hover { color: var(--ctp-text); background: rgb(49 50 68 / 0.72); }
+.statusRight .statusButtonActive {
+  color: var(--ctp-green);
+  background: transparent;
+}
+.statusRight .statusButtonActive:hover { color: var(--ctp-green); background: rgb(49 50 68 / 0.52); }
 .statusRight kbd { border: 1px solid rgb(147 153 178 / 0.35); border-radius: 3px; padding: 2px 4px; font: inherit; font-size: 0.48rem; }
-.statusRight .statusButtonActive kbd { border-color: rgb(17 17 27 / 0.3); }
+.statusRight .statusButtonActive kbd { border-color: rgb(166 227 161 / 0.3); }
 .statusPosition { border-radius: 14px 0 0 14px; color: var(--ctp-crust) !important; background: var(--ctp-teal) !important; font-weight: 800 !important; }
 
 .explorerScrim { display: none; }
