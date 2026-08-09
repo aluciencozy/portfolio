@@ -43,9 +43,11 @@ export const sections: PortfolioSection[] = [
     kind: "folder",
     accent: "green",
     children: [
-      { label: "Featured project", fileName: "featured-project.ts" },
-      { label: "Case study", fileName: "case-study.tsx" },
-      { label: "Developer tool", fileName: "developer-tool.lua" },
+      { label: "Vesta Credentialing", fileName: "vesta-credentialing.ts" },
+      { label: "Demonlist Ultimate", fileName: "demonlist-ultimate.ts" },
+      { label: "Git Janitor", fileName: "git-janitor.ts" },
+      { label: "Guess the OST", fileName: "guess-the-ost.ts" },
+      { label: "AniFind", fileName: "anifind.ts" },
     ],
   },
   {
@@ -87,9 +89,26 @@ export const projects: PortfolioProject[] = [
     status: "Shipped · 2025–2026",
     accent: "mauve",
     href: "https://github.com/aluciencozy/demonlist",
+    image: "/projects/demonlist-ultimate.png",
     highlights: [
       "Containerized backend on EC2 with media storage through S3",
       "Gemini-powered assistant and a frontend deployed through AWS Amplify",
+    ],
+  },
+  {
+    title: "Git Janitor",
+    description:
+      "A published interactive CLI that makes local and remote Git repository maintenance safer, faster, and easier to understand.",
+    tags: ["TypeScript", "Node.js", "npm", "Git"],
+    status: "Published · npm package",
+    accent: "teal",
+    href: "https://github.com/aluciencozy/git-janitor",
+    liveHref: "https://www.npmjs.com/package/@alcozy/git-janitor",
+    image: "/projects/git-janitor.png",
+    imageFit: "contain",
+    highlights: [
+      "Keyboard-navigated workflows for pruning merged branches, syncing remotes, and inspecting active branches",
+      "Published globally through npm with guardrails around destructive Git operations",
     ],
   },
   {
@@ -103,6 +122,22 @@ export const projects: PortfolioProject[] = [
     highlights: [
       "Low-latency bidirectional client-server communication",
       "Synchronized game state across active multiplayer lobbies",
+    ],
+  },
+  {
+    title: "AniFind",
+    description:
+      "A full-stack anime discovery platform where users can search titles, explore current favorites, and manage a personal watchlist.",
+    tags: ["React", "Node.js", "Express", "MongoDB", "JWT", "AniList API"],
+    status: "Shipped · Full-stack app",
+    accent: "green",
+    href: "https://github.com/aluciencozy/anifind-fullstack",
+    liveHref: "https://anifind-fullstack.vercel.app/",
+    image: "/projects/anifind.png",
+    imageFit: "contain",
+    highlights: [
+      "Secure REST API with JWT authentication and MongoDB-backed watchlist CRUD operations",
+      "Responsive React interface combining the custom backend with the AniList GraphQL API",
     ],
   },
 ];

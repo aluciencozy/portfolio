@@ -44,6 +44,12 @@ export function StaticPortfolio() {
               <h3>{project.title}</h3>
               <p>{project.description}</p>
               <small>{project.tags.join(" · ")}</small>
+              {(project.href || project.liveHref) && (
+                <div className={styles.fallbackProjectLinks}>
+                  {project.href && <a href={project.href}>Source</a>}
+                  {project.liveHref && <a href={project.liveHref}>Live project</a>}
+                </div>
+              )}
             </article>
           ))}
         </div>

@@ -190,6 +190,18 @@
   line-height: 1.7;
 }
 
+.fallbackProjectLinks {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 14px;
+  margin-top: 16px;
+}
+
+.fallbackProjectLinks a {
+  color: var(--ctp-blue);
+  font-size: 0.68rem;
+}
+
 .workspace,
 .bootTerminal {
   width: min(100%, 2400px);
@@ -932,6 +944,12 @@
 
 .mediaSlot > img { object-fit: cover; }
 
+.mediaSlot > img.projectImageContain {
+  object-fit: contain;
+  padding: clamp(10px, 1.6vw, 20px);
+  background: rgb(17 17 27 / 0.72);
+}
+
 .visualTitlebar {
   position: absolute;
   z-index: 2;
@@ -1016,6 +1034,7 @@
 .projectVisual[data-accent="green"] { --visual-accent: var(--ctp-green); }
 .projectVisual[data-accent="mauve"] { --visual-accent: var(--ctp-mauve); }
 .projectVisual[data-accent="blue"] { --visual-accent: var(--ctp-blue); }
+.projectVisual[data-accent="teal"] { --visual-accent: var(--ctp-teal); }
 
 .projectVisualBody {
   position: absolute;
@@ -1183,6 +1202,7 @@
 .projectPreview[data-accent="green"] { --card-accent: var(--ctp-green); }
 .projectPreview[data-accent="mauve"] { --card-accent: var(--ctp-mauve); }
 .projectPreview[data-accent="blue"] { --card-accent: var(--ctp-blue); }
+.projectPreview[data-accent="teal"] { --card-accent: var(--ctp-teal); }
 .projectPreview > span { color: var(--card-accent); font-size: 0.62rem; }
 .projectPreview h4 { margin: 30px 0 10px; font-size: 0.82rem; }
 .projectPreview p { margin: 0; color: var(--ctp-subtext0); font-size: 0.64rem; line-height: 1.7; }
@@ -1241,11 +1261,22 @@
 .projectCard[data-accent="green"] { --project-accent: var(--ctp-green); }
 .projectCard[data-accent="mauve"] { --project-accent: var(--ctp-mauve); }
 .projectCard[data-accent="blue"] { --project-accent: var(--ctp-blue); }
+.projectCard[data-accent="teal"] { --project-accent: var(--ctp-teal); }
 .projectMedia { position: relative; }
 .projectNumber { position: absolute; right: -8px; bottom: -12px; color: var(--project-accent); font-size: clamp(2rem, 4vw, 4.5rem); font-weight: 800; letter-spacing: -0.08em; opacity: 0.35; }
 .projectTopline { display: flex; align-items: center; justify-content: space-between; gap: 16px; }
 .projectTopline > span { color: var(--project-accent); font-size: 0.58rem; font-weight: 700; letter-spacing: 0.06em; }
-.projectTopline a { display: flex; align-items: center; gap: 4px; color: var(--ctp-subtext0); }
+.projectLinks { display: flex; align-items: center; gap: 7px; }
+.projectTopline a {
+  display: grid;
+  width: 30px;
+  height: 30px;
+  place-items: center;
+  border: 1px solid rgb(88 91 112 / 0.34);
+  border-radius: 7px;
+  color: var(--ctp-subtext0);
+  background: rgb(49 50 68 / 0.24);
+}
 .projectTopline a:hover { color: var(--project-accent); }
 .projectBody h2 { margin: 14px 0; font-size: clamp(1.25rem, 2vw, 2rem); letter-spacing: -0.035em; }
 .projectBody > p { margin: 0; color: var(--ctp-subtext0); font-size: 0.7rem; line-height: 1.8; }

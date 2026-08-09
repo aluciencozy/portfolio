@@ -69,6 +69,7 @@ function ProjectVisual({
           alt={`${project.title} project screenshot`}
           fill
           sizes="(max-width: 800px) 100vw, 38vw"
+          className={project.imageFit === "contain" ? styles.projectImageContain : undefined}
         />
       </div>
     );
@@ -170,7 +171,7 @@ function Overview({ onNavigate }: Pick<ContentPanelProps, "onNavigate">) {
       <div className={styles.metricsGrid} aria-label="Career highlights">
         <div><strong>50K+</strong><span>records migrated with zero data loss</span></div>
         <div><strong>10+</strong><span>automated migration scripts</span></div>
-        <div><strong>3</strong><span>featured full-stack projects</span></div>
+        <div><strong>{projects.length}</strong><span>featured software projects</span></div>
         <div><strong>4.0</strong><span>computer science GPA</span></div>
       </div>
 
@@ -298,11 +299,30 @@ function ProjectCard({ project, index }: { project: PortfolioProject; index: num
       <div className={styles.projectBody}>
         <div className={styles.projectTopline}>
           <span>{project.status}</span>
-          {project.href && (
-            <a href={project.href} target="_blank" rel="noreferrer" aria-label={`${project.title} on GitHub`}>
-              <Code2 size={15} /> <ExternalLink size={12} />
-            </a>
-          )}
+          <div className={styles.projectLinks}>
+            {project.href && (
+              <a
+                href={project.href}
+                target="_blank"
+                rel="noreferrer"
+                aria-label={`${project.title} source code on GitHub`}
+                title="View source code"
+              >
+                <Code2 size={15} />
+              </a>
+            )}
+            {project.liveHref && (
+              <a
+                href={project.liveHref}
+                target="_blank"
+                rel="noreferrer"
+                aria-label={`Open ${project.title}`}
+                title="Open live project"
+              >
+                <ExternalLink size={15} />
+              </a>
+            )}
+          </div>
         </div>
         <h2>{project.title}</h2>
         <p>{project.description}</p>
