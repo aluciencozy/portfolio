@@ -7,6 +7,8 @@ import { TerminalSurface } from "./TerminalSurface";
 import styles from "./portfolio.module.css";
 
 const command = "nvim .";
+const introDelay = 1_500;
+const commandHoldDelay = 1_800;
 
 const asciiMark = String.raw`       .--.
       |o_o |
@@ -53,10 +55,10 @@ export function BootSequence({
         setTypedCommand(command.slice(0, index));
         if (index >= command.length) {
           window.clearInterval(interval);
-          completionTimer.current = window.setTimeout(complete, 520);
+          completionTimer.current = window.setTimeout(complete, commandHoldDelay);
         }
       }, 82);
-    }, 780);
+    }, introDelay);
 
     return () => {
       window.clearTimeout(startTimer);
