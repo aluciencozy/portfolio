@@ -629,6 +629,15 @@
   color: var(--ctp-blue);
 }
 
+.typeScriptIcon {
+  width: 14px;
+  height: 14px;
+  flex: 0 0 14px;
+  background: var(--ctp-blue);
+  -webkit-mask: url("/typescript.svg") center / contain no-repeat;
+  mask: url("/typescript.svg") center / contain no-repeat;
+}
+
 .explorerFooter {
   border-top: 1px solid rgb(88 91 112 / 0.24);
   padding: 13px 14px 15px;
@@ -809,6 +818,15 @@
   overflow: auto;
   scrollbar-color: var(--ctp-surface1) transparent;
   scrollbar-width: thin;
+}
+
+.fallbackStage::-webkit-scrollbar-button,
+.fileTree::-webkit-scrollbar-button,
+.editorScroll::-webkit-scrollbar-button,
+.terminalHistory::-webkit-scrollbar-button {
+  width: 0;
+  height: 0;
+  display: none;
 }
 
 .overview,

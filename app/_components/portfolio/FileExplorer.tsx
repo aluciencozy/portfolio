@@ -118,7 +118,11 @@ export function FileExplorer({
                       onClick={() => onNavigate(section.id)}
                       title={`Open ${child.label}`}
                     >
-                      <FileText size={13} aria-hidden="true" />
+                      {child.fileName.endsWith(".ts") ? (
+                        <span className={styles.typeScriptIcon} aria-hidden="true" />
+                      ) : (
+                        <FileText size={13} aria-hidden="true" />
+                      )}
                       <span>{child.fileName}</span>
                     </button>
                   ))}
