@@ -1,10 +1,12 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { AnimatePresence, motion } from "motion/react";
 import { BufferTabs } from "./BufferTabs";
+import { CommandReferenceModal } from "./CommandReferenceModal";
 import { ContentPanel } from "./ContentPanel";
 import { FileExplorer } from "./FileExplorer";
+import { NeovimCommandLine } from "./NeovimCommandLine";
 import { Statusline } from "./Statusline";
 import { InteractiveTerminal } from "./TerminalSurface";
 import type { PortfolioSectionId, WorkspaceState } from "./types";
@@ -19,8 +21,13 @@ interface WorkspaceShellProps {
   onToggleExplorer: () => void;
   onCloseExplorer: () => void;
   onToggleTerminal: () => void;
-  onCloseTerminal: () => void;
   onTerminalCommand: (command: string) => void;
+  commandLineOpen: boolean;
+  commandMessage: string;
+  commandMessageTone: "default" | "error";
+  onCancelCommandLine: () => void;
+  onNeovimCommand: (command: string) => void;
+  explorerFocusRequest: number;
 }
 
 export function WorkspaceShell({
@@ -32,13 +39,19 @@ export function WorkspaceShell({
   onToggleExplorer,
   onCloseExplorer,
   onToggleTerminal,
-  onCloseTerminal,
   onTerminalCommand,
+  commandLineOpen,
+  commandMessage,
+  commandMessageTone,
+  onCancelCommandLine,
+  onNeovimCommand,
+  explorerFocusRequest,
 }: WorkspaceShellProps) {
   const explorerButtonRef = useRef<HTMLButtonElement>(null);
-  const explorerCloseButtonRef = useRef<HTMLButtonElement>(null);
   const explorerRef = useRef<HTMLElement>(null);
   const [mobileViewport, setMobileViewport] = useState(false);
+  const [referenceOpen, setReferenceOpen] = useState(false);
+  const closeReference = useCallback(() => setReferenceOpen(false), []);
   const explorerModalOpen = state.explorerOpen && mobileViewport;
   const wasExplorerModalOpen = useRef(explorerModalOpen);
 
@@ -52,9 +65,7 @@ export function WorkspaceShell({
   }, []);
 
   useEffect(() => {
-    if (explorerModalOpen && !wasExplorerModalOpen.current) {
-      explorerCloseButtonRef.current?.focus();
-    } else if (!explorerModalOpen && wasExplorerModalOpen.current) {
+    if (!explorerModalOpen && wasExplorerModalOpen.current) {
       if (mobileViewport) {
         explorerButtonRef.current?.focus();
       } else {
@@ -66,6 +77,17 @@ export function WorkspaceShell({
 
     wasExplorerModalOpen.current = explorerModalOpen;
   }, [explorerModalOpen, mobileViewport]);
+
+  const closeExplorerAndRestoreFocus = () => {
+    onCloseExplorer();
+    if (!mobileViewport) {
+      window.requestAnimationFrame(() => {
+        document
+          .querySelector<HTMLElement>('[role="tab"][aria-selected="true"]')
+          ?.focus();
+      });
+    }
+  };
 
   useEffect(() => {
     if (!explorerModalOpen) return;
@@ -117,9 +139,9 @@ export function WorkspaceShell({
           open={state.explorerOpen}
           onNavigate={onNavigate}
           onToggleFolder={onToggleFolder}
-          onClose={onCloseExplorer}
-          closeButtonRef={explorerCloseButtonRef}
+          onClose={closeExplorerAndRestoreFocus}
           explorerRef={explorerRef}
+          focusRequest={explorerFocusRequest}
           modal={explorerModalOpen}
         />
         <AnimatePresence>
@@ -129,7 +151,7 @@ export function WorkspaceShell({
               className={styles.explorerScrim}
               aria-hidden="true"
               tabIndex={-1}
-              onClick={onCloseExplorer}
+              onClick={closeExplorerAndRestoreFocus}
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
@@ -165,20 +187,38 @@ export function WorkspaceShell({
               >
                 <InteractiveTerminal
                   history={state.terminalHistory}
+                  commandHistory={state.terminalCommandHistory}
+                  cwd={state.terminalCwd}
                   onSubmit={onTerminalCommand}
-                  onClose={onCloseTerminal}
                 />
               </motion.div>
             )}
           </AnimatePresence>
         </section>
       </div>
+      <NeovimCommandLine
+        open={commandLineOpen}
+        message={commandMessage}
+        messageTone={commandMessageTone}
+        onCancel={onCancelCommandLine}
+        onSubmit={onNeovimCommand}
+      />
       <Statusline
         activeSection={state.activeSection}
         terminalOpen={state.terminalOpen}
         onToggleTerminal={onToggleTerminal}
         inert={explorerModalOpen}
+        mode={commandLineOpen ? "COMMAND" : state.terminalOpen ? "TERMINAL" : "NORMAL"}
+        onOpenHelp={() => setReferenceOpen(true)}
       />
+      <AnimatePresence>
+        {referenceOpen && (
+          <CommandReferenceModal
+            key="command-reference"
+            onClose={closeReference}
+          />
+        )}
+      </AnimatePresence>
     </motion.div>
   );
 }

@@ -6,6 +6,8 @@ export const initialWorkspaceState: WorkspaceState = {
   expandedFolders: ["projects"],
   explorerOpen: false,
   terminalOpen: false,
+  terminalCwd: "~/portfolio",
+  terminalCommandHistory: [],
   terminalHistory: [
     {
       id: 0,
@@ -57,6 +59,13 @@ export function workspaceReducer(
       return { ...state, terminalOpen: !state.terminalOpen };
     case "set-terminal":
       return { ...state, terminalOpen: action.open };
+    case "set-terminal-cwd":
+      return { ...state, terminalCwd: action.cwd };
+    case "record-terminal-command":
+      return {
+        ...state,
+        terminalCommandHistory: [...state.terminalCommandHistory, action.command],
+      };
     case "append-terminal":
       return {
         ...state,

@@ -16,7 +16,7 @@ import {
   MapPin,
 } from "lucide-react";
 import { asciiPortrait } from "./ascii-portrait";
-import { EditorScrollbar } from "./EditorScrollbar";
+import { CustomScrollbar } from "./CustomScrollbar";
 import {
   education,
   experience,
@@ -557,7 +557,12 @@ export function ContentPanel({ activeSection, onNavigate }: ContentPanelProps) {
         {activeSection === "skills" && <Skills />}
         {activeSection === "contact" && <Contact />}
       </motion.article>
-      <EditorScrollbar contentKey={activeSection} scrollRef={scrollRef} />
+      <CustomScrollbar
+        contentKey={activeSection}
+        controlsId="portfolio-scroll-content"
+        label="Portfolio content scroll position"
+        scrollRef={scrollRef}
+      />
     </main>
   );
 }

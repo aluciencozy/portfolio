@@ -1,75 +1,203 @@
-import type { TerminalCommandResult } from "./types";
+import { externalLinks, projects, sectionById } from "./data";
+import type {
+  PortfolioSectionId,
+  TerminalCommandResult,
+  TerminalDirectory,
+} from "./types";
+
+const rootDirectory: TerminalDirectory = "~/portfolio";
+
+const directorySections: Record<string, PortfolioSectionId> = {
+  about: "about",
+  contact: "contact",
+  experience: "experience",
+  projects: "projects",
+  skills: "skills",
+};
+
+const rootFiles = [
+  "README.md",
+  "about.md",
+  "experience/",
+  "projects/",
+  "skills.json",
+  "contact.md",
+];
+
+export const terminalCommandHelp = [
+  { command: "help", description: "Show terminal commands" },
+  { command: "pwd", description: "Print the virtual working directory" },
+  { command: "ls [path]", description: "List portfolio files" },
+  { command: "cd [path]", description: "Change directory and open its buffer" },
+  { command: "cat <file>", description: "Preview a portfolio file" },
+  { command: "about / projects", description: "Open a portfolio buffer" },
+  { command: "experience / skills", description: "Open a portfolio buffer" },
+  { command: "contact", description: "Open contact.md" },
+  { command: "resume / github", description: "Open an external portfolio link" },
+  { command: "linkedin", description: "Open LinkedIn" },
+  { command: "whoami", description: "Print a short introduction" },
+  { command: "clear", description: "Clear terminal history" },
+  { command: "exit", description: "Close the terminal split" },
+] as const;
 
 const helpLines = [
   "Available commands:",
-  "  help        show this command list",
-  "  ls          list portfolio files",
-  "  whoami      print a short introduction",
-  "  projects    open the projects buffer",
-  "  experience  open the experience buffer",
-  "  skills      open the skills buffer",
-  "  clear       clear terminal history",
-  "  exit        close the terminal split",
+  ...terminalCommandHelp.map(
+    ({ command, description }) => `  ${command.padEnd(21)}${description.toLowerCase()}`,
+  ),
+  "",
+  "Tip: use Arrow Up and Arrow Down to recall commands.",
 ];
 
-export function runTerminalCommand(rawCommand: string): TerminalCommandResult {
-  const command = rawCommand.trim().toLowerCase();
-
-  if (!command) {
-    return { type: "print", lines: [] };
+function resolveDirectory(
+  rawPath: string | undefined,
+  cwd: TerminalDirectory,
+): TerminalDirectory | null {
+  if (!rawPath || rawPath === "~" || rawPath === "/" || rawPath === "~/portfolio") {
+    return rootDirectory;
   }
 
-  switch (command) {
-    case "help":
-      return { type: "print", lines: helpLines };
-    case "ls":
-      return {
-        type: "print",
-        lines: [
-          "README.md  about.md  experience/  projects/  skills.json  contact.md",
-        ],
-      };
-    case "whoami":
-      return {
-        type: "print",
-        tone: "success",
-        lines: [
-          "Alex Cosentino - Software Developer",
-          "I build thoughtful, reliable software with a sharp eye for developer experience.",
-        ],
-      };
-    case "projects":
-      return {
-        type: "navigate",
-        section: "projects",
-        lines: ["Opening projects/"],
-      };
-    case "experience":
-      return {
-        type: "navigate",
-        section: "experience",
-        lines: ["Opening experience/"],
-      };
-    case "skills":
-      return {
-        type: "navigate",
-        section: "skills",
-        lines: ["Opening skills.json"],
-      };
-    case "clear":
-      return { type: "clear" };
-    case "exit":
-      return { type: "close", lines: ["Closing terminal split."] };
-    case "nvim .":
-      return {
-        type: "print",
-        lines: ["portfolio workspace is already open"],
-      };
-    default:
-      return {
-        type: "print",
-        tone: "error",
-        lines: [`zsh: command not found: ${rawCommand.trim()}`, "Type 'help' to get oriented."],
-      };
+  const path = rawPath.replace(/\/$/, "");
+  if (path === ".") return cwd;
+  if (path === "..") return rootDirectory;
+  if (path === "experience" || path === "./experience" || path.endsWith("/experience")) {
+    return "~/portfolio/experience";
   }
+  if (path === "projects" || path === "./projects" || path.endsWith("/projects")) {
+    return "~/portfolio/projects";
+  }
+
+  return null;
+}
+
+function directoryListing(path: TerminalDirectory): string[] {
+  if (path === "~/portfolio/experience") {
+    return ["current-role.md  previous-role.md"];
+  }
+  if (path === "~/portfolio/projects") {
+    return [sectionById.projects.children?.map((project) => project.fileName).join("  ") ?? ""];
+  }
+  return [rootFiles.join("  ")];
+}
+
+function resolveFileName(rawFile: string, cwd: TerminalDirectory) {
+  const normalized = rawFile.replace(/^\.\//, "").toLowerCase();
+  if (normalized.includes("/")) return normalized.split("/").at(-1) ?? normalized;
+  if (cwd === "~/portfolio/projects" && !normalized.endsWith(".ts")) {
+    return `${normalized}.ts`;
+  }
+  return normalized;
+}
+
+function catFile(rawFile: string, cwd: TerminalDirectory): TerminalCommandResult {
+  const file = resolveFileName(rawFile, cwd);
+  const staticFiles: Record<string, string[]> = {
+    "readme.md": ["Alex Cosentino", "Software developer building reliable full-stack systems with product-minded detail."],
+    "about.md": ["CS student at UCF and Software Developer Intern at Vesta Teleradiology.", "Terminal-first workflow, Catppuccin Mocha enthusiast."],
+    "skills.json": ["{ TypeScript, React, Next.js, Node.js, Python, SQL, PostgreSQL, AWS, GCP }"],
+    "contact.md": ["GitHub: github.com/aluciencozy", "LinkedIn: linkedin.com/in/alcozy", "Email: aluciencozy22@gmail.com"],
+    "current-role.md": ["Software Developer Intern - Vesta Teleradiology", "Feb 2026 - Present"],
+    "previous-role.md": ["Food and Beverage Attendant - Hilton", "Jun 2024 - Aug 2026"],
+  };
+
+  if (staticFiles[file]) return { type: "print", lines: staticFiles[file] };
+
+  const projectIndex = sectionById.projects.children?.findIndex(
+    (item) => item.fileName.toLowerCase() === file,
+  ) ?? -1;
+  const project = projects[projectIndex];
+  if (project) {
+    return {
+      type: "print",
+      lines: [project.title, project.description, `Stack: ${project.tags.join(", ")}`],
+    };
+  }
+
+  return {
+    type: "print",
+    tone: "error",
+    lines: [`cat: ${rawFile}: No such file`],
+  };
+}
+
+function openSection(section: PortfolioSectionId, cwd?: TerminalDirectory): TerminalCommandResult {
+  return {
+    type: "navigate",
+    section,
+    cwd,
+    lines: [`Opening ${section === "overview" ? "README.md" : section}`],
+  };
+}
+
+export function runTerminalCommand(
+  rawCommand: string,
+  cwd: TerminalDirectory,
+): TerminalCommandResult {
+  const trimmed = rawCommand.trim();
+  if (!trimmed) return { type: "print", lines: [] };
+
+  const [rawName, ...args] = trimmed.split(/\s+/);
+  const command = rawName.toLowerCase();
+
+  if (command === "help") return { type: "print", lines: helpLines };
+  if (command === "pwd") return { type: "print", lines: [cwd] };
+  if (command === "whoami") {
+    return {
+      type: "print",
+      tone: "success",
+      lines: [
+        "Alex Cosentino - Software Developer",
+        "I build thoughtful, reliable software with a sharp eye for developer experience.",
+      ],
+    };
+  }
+  if (command === "clear") return { type: "clear" };
+  if (command === "exit") return { type: "close", lines: ["Closing terminal split."] };
+  if (command === "nvim" && args.join(" ") === ".") {
+    return { type: "print", lines: ["portfolio workspace is already open"] };
+  }
+
+  if (command === "ls") {
+    const target = resolveDirectory(args[0], cwd);
+    if (!target) {
+      return { type: "print", tone: "error", lines: [`ls: ${args[0]}: No such directory`] };
+    }
+    return { type: "print", lines: directoryListing(target) };
+  }
+
+  if (command === "cd") {
+    const target = resolveDirectory(args[0], cwd);
+    if (!target) {
+      return { type: "print", tone: "error", lines: [`cd: no such file or directory: ${args[0]}`] };
+    }
+    if (target === rootDirectory) return openSection("overview", target);
+    return openSection(target === "~/portfolio/experience" ? "experience" : "projects", target);
+  }
+
+  if (command === "cat") {
+    if (!args[0]) return { type: "print", tone: "error", lines: ["cat: missing file operand"] };
+    return catFile(args.join(" "), cwd);
+  }
+
+  if (command === "open" && args[0]) {
+    const section = args[0].replace(/\.(md|json|ts)$/i, "").toLowerCase();
+    if (section === "readme") return openSection("overview");
+    if (directorySections[section]) return openSection(directorySections[section]);
+  }
+
+  if (command === "overview" || command === "home") return openSection("overview");
+  if (directorySections[command]) return openSection(directorySections[command]);
+
+  if (["resume", "github", "linkedin"].includes(command)) {
+    const link = externalLinks.find((item) => item.type === command);
+    if (link?.href) {
+      return { type: "print", tone: "success", href: link.href, lines: [`Opening ${link.label}...`] };
+    }
+  }
+
+  return {
+    type: "print",
+    tone: "error",
+    lines: [`zsh: command not found: ${rawName}`, "Type 'help' to get oriented."],
+  };
 }

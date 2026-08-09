@@ -531,6 +531,14 @@
   box-shadow: inset 2px 0 0 var(--row-accent, var(--ctp-blue));
 }
 
+.explorer:focus-within .fileRowSelected {
+  color: var(--ctp-text);
+  background: rgb(88 91 112 / 0.56);
+  box-shadow:
+    inset 2px 0 0 var(--ctp-lavender),
+    inset 0 0 0 1px rgb(180 190 254 / 0.16);
+}
+
 .fileRow[data-accent="blue"] { --row-accent: var(--ctp-blue); }
 .fileRow[data-accent="green"] { --row-accent: var(--ctp-green); }
 .fileRow[data-accent="lavender"] { --row-accent: var(--ctp-lavender); }
@@ -615,6 +623,12 @@
 .fileChildren button:hover {
   color: var(--ctp-text);
   background: rgb(49 50 68 / 0.52);
+}
+
+.explorer:focus-within .fileChildren .fileChildSelected {
+  color: var(--ctp-text);
+  background: rgb(88 91 112 / 0.5);
+  box-shadow: inset 2px 0 0 var(--ctp-lavender);
 }
 
 .fileChildren button span {
@@ -822,7 +836,7 @@
 
 .editorScroll::-webkit-scrollbar { display: none; }
 
-.editorScrollRail {
+.customScrollRail {
   position: absolute;
   z-index: 3;
   top: 8px;
@@ -837,23 +851,23 @@
   touch-action: none;
 }
 
-.editorScrollRailVisible {
+.customScrollRailVisible {
   opacity: 0.58;
   pointer-events: auto;
 }
 
-.editorScrollRailVisible:hover,
-.editorScrollRailVisible:focus-visible {
+.customScrollRailVisible:hover,
+.customScrollRailVisible:focus-visible {
   background: rgb(49 50 68 / 0.38);
   opacity: 1;
 }
 
-.editorScrollRail:focus-visible {
+.customScrollRail:focus-visible {
   outline: 1px solid rgb(180 190 254 / 0.72);
   outline-offset: 1px;
 }
 
-.editorScrollThumb {
+.customScrollThumb {
   width: 6px;
   min-height: 36px;
   margin-inline: auto;
@@ -863,8 +877,8 @@
   transition: background-color 160ms ease;
 }
 
-.editorScrollThumb:hover { background: var(--ctp-surface2); }
-.editorScrollThumb:active { cursor: grabbing; }
+.customScrollThumb:hover { background: var(--ctp-surface2); }
+.customScrollThumb:active { cursor: grabbing; }
 
 .fallbackStage::-webkit-scrollbar-button,
 .fileTree::-webkit-scrollbar-button,
@@ -1434,15 +1448,47 @@
   backdrop-filter: blur(var(--glass-blur));
 }
 
-.terminalPaneSurface .terminalTitlebar { min-height: 32px; }
-.terminalCloseButton { position: absolute; z-index: 2; top: 4px; right: 6px; display: none; width: 24px; height: 24px; place-items: center; border: 0; border-radius: 4px; color: var(--ctp-overlay1); background: transparent; }
-.terminalHistory { min-height: 0; flex: 1; overflow: auto; padding: 14px 20px 19px; color: var(--ctp-subtext1); font-size: 0.68rem; line-height: 1.62; scrollbar-width: thin; }
-.terminalEntry { margin-bottom: 9px; white-space: pre-wrap; }
+.terminalScrollArea { position: relative; display: flex; min-height: 0; flex: 1; overflow: hidden; cursor: text; }
+.terminalHistory { min-width: 0; min-height: 0; flex: 1; overflow: auto; padding: 16px 28px 20px 20px; color: var(--ctp-subtext1); font-size: 0.68rem; line-height: 1.62; scrollbar-width: none; }
+.terminalHistory::-webkit-scrollbar { display: none; }
+.terminalEntry { margin-bottom: 11px; white-space: pre-wrap; }
 .terminalError { color: var(--ctp-red); }
 .terminalSuccess { color: var(--ctp-green); }
 .terminalEntry .commandLine { color: var(--ctp-text); }
+.terminalPath { color: var(--ctp-blue); font-size: 0.62rem; }
+.terminalEntry .terminalPath { margin-bottom: 1px; }
 .terminalForm { display: flex; align-items: center; gap: 10px; }
-.terminalForm input { min-width: 0; flex: 1; border: 0; outline: 0; color: var(--ctp-text); background: transparent; font: inherit; caret-color: var(--ctp-rosewater); }
+.terminalInputShell { position: relative; display: block; min-width: 0; min-height: 1.62em; flex: 1; color: var(--ctp-text); white-space: pre; }
+.terminalInputMirror { position: absolute; z-index: 1; inset: 0; overflow: hidden; pointer-events: none; }
+.terminalBlockCursor { display: inline-block; min-width: 1ch; height: 1.38em; color: var(--ctp-crust); background: var(--ctp-rosewater); line-height: 1.38em; animation: blink 1.05s steps(1, end) infinite; }
+.terminalForm input { position: absolute; z-index: 2; inset: 0; width: 100%; min-width: 0; border: 0; outline: 0; padding: 0; color: transparent; background: transparent; font: inherit; caret-color: transparent; }
+
+.neovimCommandBar { position: relative; z-index: 9; min-height: 29px; border-top: 1px solid rgb(203 166 247 / 0.28); padding: 5px 12px; color: var(--ctp-subtext1); background: linear-gradient(90deg, rgb(49 50 68 / 0.82), rgb(30 30 46 / 0.9)); box-shadow: inset 3px 0 0 rgb(203 166 247 / 0.78); font-size: 0.65rem; line-height: 1.5; backdrop-filter: blur(12px); }
+.neovimCommandBar form { display: flex; align-items: center; gap: 1px; }
+.neovimCommandBar form > span { color: var(--ctp-mauve); font-weight: 800; }
+.neovimCommandBar input { min-width: 0; flex: 1; border: 0; outline: 0; padding: 0; color: var(--ctp-text); background: transparent; font: inherit; caret-color: var(--ctp-rosewater); }
+.neovimCommandError { color: var(--ctp-red); }
+
+.referenceBackdrop { position: absolute; z-index: 30; inset: 0; display: grid; place-items: center; padding: clamp(14px, 4vw, 52px); background: rgb(17 17 27 / 0.62); backdrop-filter: blur(8px); }
+.referenceModal { display: flex; width: min(100%, 980px); max-height: min(82vh, 760px); min-height: 0; overflow: hidden; border: 1px solid rgb(180 190 254 / 0.25); border-radius: 12px; color: var(--ctp-text); background: linear-gradient(145deg, rgb(30 30 46 / 0.97), rgb(24 24 37 / 0.98)); box-shadow: 0 36px 100px rgb(5 5 14 / 0.68); flex-direction: column; }
+.referenceHeader { display: flex; align-items: flex-start; justify-content: space-between; gap: 24px; border-bottom: 1px solid rgb(88 91 112 / 0.3); padding: 22px 24px 20px; background: rgb(49 50 68 / 0.28); }
+.referenceHeader > div > span { color: var(--ctp-mauve); font-size: 0.56rem; font-weight: 800; letter-spacing: 0.13em; }
+.referenceHeader h2 { margin: 7px 0 0; font-size: clamp(1.05rem, 2vw, 1.4rem); letter-spacing: -0.025em; }
+.referenceHeader p { margin: 7px 0 0; color: var(--ctp-overlay1); font-size: 0.62rem; }
+.referenceHeader button { display: grid; width: 30px; height: 30px; flex: 0 0 30px; place-items: center; border: 1px solid rgb(88 91 112 / 0.4); border-radius: 6px; color: var(--ctp-subtext0); background: rgb(24 24 37 / 0.5); cursor: pointer; }
+.referenceHeader button:hover { color: var(--ctp-text); border-color: rgb(245 194 231 / 0.42); background: rgb(69 71 90 / 0.58); }
+.referenceContent { display: grid; min-height: 0; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 28px 34px; overflow: auto; padding: 24px; scrollbar-width: thin; scrollbar-color: var(--ctp-surface1) transparent; }
+.referenceContent:focus-visible { outline: 1px solid rgb(180 190 254 / 0.42); outline-offset: -3px; }
+.referenceContent > section { min-width: 0; }
+.referenceContent h3 { margin: 0 0 12px; color: var(--ctp-lavender); font-size: 0.67rem; letter-spacing: 0.08em; text-transform: uppercase; }
+.referenceList { display: grid; gap: 2px; }
+.referenceList > div { display: grid; min-width: 0; grid-template-columns: minmax(116px, 0.72fr) minmax(0, 1fr); align-items: center; gap: 13px; border-radius: 5px; padding: 6px 7px; }
+.referenceList > div:hover { background: rgb(49 50 68 / 0.38); }
+.referenceList > div > span:last-child { color: var(--ctp-subtext0); font-size: 0.59rem; line-height: 1.45; }
+.referenceKeys { display: flex; min-width: 0; flex-wrap: wrap; gap: 4px; }
+.referenceKeys kbd,
+.referenceList code { width: fit-content; border: 1px solid rgb(147 153 178 / 0.28); border-radius: 4px; padding: 2px 5px; color: var(--ctp-rosewater); background: rgb(17 17 27 / 0.46); font: inherit; font-size: 0.55rem; white-space: nowrap; }
+.referenceList code { color: var(--ctp-green); }
 
 .statusline {
   position: relative;
@@ -1459,6 +1505,8 @@
 .statusLeft,
 .statusRight { display: flex; min-width: 0; align-items: stretch; }
 .modeBadge { display: flex; align-items: center; border-radius: 0 14px 14px 0; padding: 0 17px 0 13px; color: var(--ctp-crust); background: var(--ctp-blue); font-weight: 800; }
+.modeBadge[data-mode="COMMAND"] { background: var(--ctp-mauve); }
+.modeBadge[data-mode="TERMINAL"] { background: var(--ctp-green); }
 .statusFile { display: flex; max-width: 180px; align-items: center; overflow: hidden; padding: 0 15px; color: var(--ctp-text); text-overflow: ellipsis; white-space: nowrap; }
 .gitStatus { display: flex; align-items: center; gap: 6px; color: var(--ctp-overlay1); }
 .statusRight > span,
@@ -1479,6 +1527,8 @@
 .statusRight .statusButtonActive:hover { color: var(--ctp-green); background: rgb(49 50 68 / 0.52); }
 .statusRight kbd { border: 1px solid rgb(147 153 178 / 0.35); border-radius: 3px; padding: 2px 4px; font: inherit; font-size: 0.48rem; }
 .statusRight .statusButtonActive kbd { border-color: rgb(166 227 161 / 0.3); }
+.statusRight .helpButton { width: 26px; justify-content: center; padding: 0; color: var(--ctp-overlay0); }
+.statusRight .helpButton:hover { color: var(--ctp-lavender); }
 .statusPosition { border-radius: 14px 0 0 14px; color: var(--ctp-crust) !important; background: var(--ctp-teal) !important; font-weight: 800 !important; }
 
 .explorerScrim { display: none; }
@@ -1502,10 +1552,6 @@
 
 .experienceRoot .terminalForm input:focus-visible {
   outline: 0;
-}
-
-.terminalForm:focus-within {
-  box-shadow: inset 2px 0 0 var(--ctp-lavender);
 }
 
 @media (max-width: 1050px) {
@@ -1584,6 +1630,9 @@
   .experienceTopline > div:last-child { text-align: left; }
   .statusEncoding,
   .statusRight kbd { display: none !important; }
+  .referenceBackdrop { padding: 12px; }
+  .referenceModal { max-height: 86vh; }
+  .referenceContent { grid-template-columns: 1fr; gap: 25px; padding: 19px 16px 24px; }
 
   .fallbackGrid { grid-template-columns: 1fr; }
 }
@@ -1636,7 +1685,8 @@
 
 @media (prefers-reduced-motion: reduce) {
   .cursor,
-  .contactCommand i { animation: none; }
+  .contactCommand i,
+  .terminalBlockCursor { animation: none; }
 
   .projectPreview,
   .contactGrid a,

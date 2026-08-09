@@ -61,16 +61,29 @@ export interface ExperienceEntry {
 export interface TerminalEntry {
   id: number;
   command?: string;
+  cwd?: TerminalDirectory;
   lines: string[];
   tone?: "default" | "error" | "success";
 }
 
+export type TerminalDirectory =
+  | "~/portfolio"
+  | "~/portfolio/experience"
+  | "~/portfolio/projects";
+
 export type TerminalCommandResult =
-  | { type: "print"; lines: string[]; tone?: TerminalEntry["tone"] }
+  | {
+      type: "print";
+      lines: string[];
+      tone?: TerminalEntry["tone"];
+      cwd?: TerminalDirectory;
+      href?: string;
+    }
   | {
       type: "navigate";
       section: PortfolioSectionId;
       lines: string[];
+      cwd?: TerminalDirectory;
     }
   | { type: "clear" }
   | { type: "close"; lines: string[] };
@@ -81,6 +94,8 @@ export interface WorkspaceState {
   expandedFolders: PortfolioSectionId[];
   explorerOpen: boolean;
   terminalOpen: boolean;
+  terminalCwd: TerminalDirectory;
+  terminalCommandHistory: string[];
   terminalHistory: TerminalEntry[];
 }
 
@@ -92,5 +107,7 @@ export type WorkspaceAction =
   | { type: "set-explorer"; open: boolean }
   | { type: "toggle-terminal" }
   | { type: "set-terminal"; open: boolean }
+  | { type: "set-terminal-cwd"; cwd: TerminalDirectory }
+  | { type: "record-terminal-command"; command: string }
   | { type: "append-terminal"; entry: TerminalEntry }
   | { type: "clear-terminal" };

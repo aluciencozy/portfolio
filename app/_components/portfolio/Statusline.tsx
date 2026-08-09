@@ -1,6 +1,6 @@
 "use client";
 
-import { GitBranch, PanelBottom, Terminal } from "lucide-react";
+import { CircleHelp, GitBranch, PanelBottom, Terminal } from "lucide-react";
 import { sectionById } from "./data";
 import type { PortfolioSectionId } from "./types";
 import styles from "./portfolio.module.css";
@@ -10,6 +10,8 @@ interface StatuslineProps {
   terminalOpen: boolean;
   onToggleTerminal: () => void;
   inert?: boolean;
+  mode: "NORMAL" | "COMMAND" | "TERMINAL";
+  onOpenHelp: () => void;
 }
 
 export function Statusline({
@@ -17,13 +19,15 @@ export function Statusline({
   terminalOpen,
   onToggleTerminal,
   inert = false,
+  mode,
+  onOpenHelp,
 }: StatuslineProps) {
   const section = sectionById[activeSection];
 
   return (
     <footer className={styles.statusline} inert={inert}>
       <div className={styles.statusLeft}>
-        <span className={styles.modeBadge}>NORMAL</span>
+        <span className={styles.modeBadge} data-mode={mode}>{mode}</span>
         <span className={styles.statusFile}>{section.fileName}</span>
         <span className={styles.gitStatus}>
           <GitBranch size={13} aria-hidden="true" />
@@ -32,6 +36,15 @@ export function Statusline({
       </div>
       <div className={styles.statusRight}>
         <span className={styles.statusEncoding}>UTF-8</span>
+        <button
+          type="button"
+          className={styles.helpButton}
+          onClick={onOpenHelp}
+          aria-label="Open commands and shortcuts"
+          title="Commands and shortcuts"
+        >
+          <CircleHelp size={14} />
+        </button>
         <button
           type="button"
           className={terminalOpen ? styles.statusButtonActive : ""}
