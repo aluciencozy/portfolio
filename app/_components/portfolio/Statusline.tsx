@@ -9,17 +9,19 @@ interface StatuslineProps {
   activeSection: PortfolioSectionId;
   terminalOpen: boolean;
   onToggleTerminal: () => void;
+  inert?: boolean;
 }
 
 export function Statusline({
   activeSection,
   terminalOpen,
   onToggleTerminal,
+  inert = false,
 }: StatuslineProps) {
   const section = sectionById[activeSection];
 
   return (
-    <footer className={styles.statusline}>
+    <footer className={styles.statusline} inert={inert}>
       <div className={styles.statusLeft}>
         <span className={styles.modeBadge}>NORMAL</span>
         <span className={styles.statusFile}>{section.fileName}</span>
@@ -46,4 +48,3 @@ export function Statusline({
     </footer>
   );
 }
-

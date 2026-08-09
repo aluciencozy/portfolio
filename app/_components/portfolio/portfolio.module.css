@@ -43,6 +43,7 @@
 }
 
 .bootStage,
+.loadingStage,
 .fallbackStage {
   position: absolute;
   inset: var(--app-inset-block) var(--app-inset-inline);
@@ -51,7 +52,15 @@
   place-items: center;
 }
 
+.loadingWindow {
+  width: min(100%, 2400px);
+  height: min(100%, 1320px);
+  border: 1px solid transparent;
+  border-radius: 12px;
+}
+
 .fallbackStage {
+  z-index: 10;
   overflow: auto;
   place-items: start center;
   scrollbar-color: var(--ctp-surface1) transparent;

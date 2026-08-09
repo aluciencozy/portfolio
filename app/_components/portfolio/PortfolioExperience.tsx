@@ -1,6 +1,5 @@
 "use client";
 
-import type { ReactNode } from "react";
 import { useCallback, useEffect, useReducer, useRef, useState } from "react";
 import { AnimatePresence, MotionConfig, useReducedMotion } from "motion/react";
 import { BootSequence } from "./BootSequence";
@@ -31,7 +30,7 @@ function rememberCompletedBoot() {
   }
 }
 
-export function PortfolioExperience({ children }: { children: ReactNode }) {
+export function PortfolioExperience() {
   const reducedMotion = useReducedMotion() ?? false;
   const [phase, setPhase] = useState<ExperiencePhase>("checking");
   const [state, dispatch] = useReducer(workspaceReducer, initialWorkspaceState);
@@ -160,8 +159,8 @@ export function PortfolioExperience({ children }: { children: ReactNode }) {
         <div className={styles.ambientGlow} aria-hidden="true" />
         <AnimatePresence mode="sync" initial={false}>
           {phase === "checking" && (
-            <div className={styles.fallbackStage} key="checking">
-              {children}
+            <div className={styles.loadingStage} key="checking" aria-hidden="true">
+              <div className={styles.loadingWindow} />
             </div>
           )}
           {phase === "booting" && (

@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { AnimatePresence, motion } from "motion/react";
 import { BufferTabs } from "./BufferTabs";
 import { ContentPanel } from "./ContentPanel";
@@ -37,22 +37,70 @@ export function WorkspaceShell({
 }: WorkspaceShellProps) {
   const explorerButtonRef = useRef<HTMLButtonElement>(null);
   const explorerCloseButtonRef = useRef<HTMLButtonElement>(null);
-  const wasExplorerOpen = useRef(state.explorerOpen);
+  const explorerRef = useRef<HTMLElement>(null);
+  const [mobileViewport, setMobileViewport] = useState(false);
+  const explorerModalOpen = state.explorerOpen && mobileViewport;
+  const wasExplorerModalOpen = useRef(explorerModalOpen);
 
   useEffect(() => {
-    if (!window.matchMedia("(max-width: 800px)").matches) {
-      wasExplorerOpen.current = state.explorerOpen;
-      return;
-    }
+    const mediaQuery = window.matchMedia("(max-width: 800px)");
+    const updateViewport = () => setMobileViewport(mediaQuery.matches);
 
-    if (state.explorerOpen && !wasExplorerOpen.current) {
+    updateViewport();
+    mediaQuery.addEventListener("change", updateViewport);
+    return () => mediaQuery.removeEventListener("change", updateViewport);
+  }, []);
+
+  useEffect(() => {
+    if (explorerModalOpen && !wasExplorerModalOpen.current) {
       explorerCloseButtonRef.current?.focus();
-    } else if (!state.explorerOpen && wasExplorerOpen.current) {
-      explorerButtonRef.current?.focus();
+    } else if (!explorerModalOpen && wasExplorerModalOpen.current) {
+      if (mobileViewport) {
+        explorerButtonRef.current?.focus();
+      } else {
+        document
+          .querySelector<HTMLElement>('[role="tab"][aria-selected="true"]')
+          ?.focus();
+      }
     }
 
-    wasExplorerOpen.current = state.explorerOpen;
-  }, [state.explorerOpen]);
+    wasExplorerModalOpen.current = explorerModalOpen;
+  }, [explorerModalOpen, mobileViewport]);
+
+  useEffect(() => {
+    if (!explorerModalOpen) return;
+
+    const containFocus = (event: KeyboardEvent) => {
+      if (event.key !== "Tab") return;
+
+      const focusable = Array.from(
+        explorerRef.current?.querySelectorAll<HTMLElement>(
+          'a[href], button:not([disabled]), [tabindex]:not([tabindex="-1"])',
+        ) ?? [],
+      ).filter((element) => element.getClientRects().length > 0);
+      const first = focusable.at(0);
+      const last = focusable.at(-1);
+      if (!first || !last) return;
+
+      const activeElement = document.activeElement;
+      if (
+        event.shiftKey &&
+        (activeElement === first || !explorerRef.current?.contains(activeElement))
+      ) {
+        event.preventDefault();
+        last.focus();
+      } else if (
+        !event.shiftKey &&
+        (activeElement === last || !explorerRef.current?.contains(activeElement))
+      ) {
+        event.preventDefault();
+        first.focus();
+      }
+    };
+
+    document.addEventListener("keydown", containFocus);
+    return () => document.removeEventListener("keydown", containFocus);
+  }, [explorerModalOpen]);
 
   return (
     <motion.div
@@ -71,13 +119,16 @@ export function WorkspaceShell({
           onToggleFolder={onToggleFolder}
           onClose={onCloseExplorer}
           closeButtonRef={explorerCloseButtonRef}
+          explorerRef={explorerRef}
+          modal={explorerModalOpen}
         />
         <AnimatePresence>
           {state.explorerOpen && (
             <motion.button
               type="button"
               className={styles.explorerScrim}
-              aria-label="Close file explorer"
+              aria-hidden="true"
+              tabIndex={-1}
               onClick={onCloseExplorer}
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
@@ -85,7 +136,11 @@ export function WorkspaceShell({
             />
           )}
         </AnimatePresence>
-        <section className={styles.editorColumn} aria-label="Portfolio editor">
+        <section
+          className={styles.editorColumn}
+          aria-label="Portfolio editor"
+          inert={explorerModalOpen}
+        >
           <BufferTabs
             activeSection={state.activeSection}
             buffers={state.openBuffers}
@@ -122,6 +177,7 @@ export function WorkspaceShell({
         activeSection={state.activeSection}
         terminalOpen={state.terminalOpen}
         onToggleTerminal={onToggleTerminal}
+        inert={explorerModalOpen}
       />
     </motion.div>
   );

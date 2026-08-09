@@ -24,6 +24,8 @@ interface FileExplorerProps {
   onToggleFolder: (section: PortfolioSectionId) => void;
   onClose: () => void;
   closeButtonRef: RefObject<HTMLButtonElement | null>;
+  explorerRef: RefObject<HTMLElement | null>;
+  modal: boolean;
 }
 
 function FileIcon({ kind }: { kind: "markdown" | "folder" | "json" }) {
@@ -40,11 +42,16 @@ export function FileExplorer({
   onToggleFolder,
   onClose,
   closeButtonRef,
+  explorerRef,
+  modal,
 }: FileExplorerProps) {
   return (
     <aside
+      ref={explorerRef}
       id="portfolio-file-explorer"
       className={`${styles.explorer} ${open ? styles.explorerOpen : ""}`}
+      role={modal ? "dialog" : undefined}
+      aria-modal={modal || undefined}
       aria-label="Portfolio file explorer"
     >
       <div className={styles.explorerHeader}>
