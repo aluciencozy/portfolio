@@ -1072,33 +1072,37 @@
   padding: 48px 22px 25px;
 }
 
-.profilePortrait {
+.asciiPortrait {
   position: relative;
   z-index: 1;
-  width: clamp(86px, 9vw, 126px);
-  aspect-ratio: 1;
+  display: grid;
+  width: 100%;
+  min-height: clamp(126px, 10vw, 158px);
   overflow: hidden;
-  border: 1px solid rgb(203 166 247 / 0.42);
-  border-radius: 50%;
-  background: var(--ctp-surface0);
-  box-shadow:
-    0 0 0 9px rgb(203 166 247 / 0.06),
-    0 18px 45px rgb(17 17 27 / 0.45);
-}
-
-.profilePortrait > img {
-  object-fit: cover;
-  filter: saturate(0.78) brightness(0.9) contrast(0.97);
-}
-
-.profilePortrait::after {
-  position: absolute;
-  inset: 0;
+  place-items: center;
+  border-block: 1px solid rgb(180 190 254 / 0.12);
   background:
-    linear-gradient(145deg, rgb(137 180 250 / 0.1), rgb(203 166 247 / 0.14)),
-    rgb(30 30 46 / 0.06);
-  content: "";
-  pointer-events: none;
+    radial-gradient(circle at 50% 42%, rgb(203 166 247 / 0.1), transparent 58%),
+    rgb(17 17 27 / 0.16);
+  box-shadow:
+    inset 0 1px rgb(255 255 255 / 0.02),
+    0 18px 45px rgb(17 17 27 / 0.28);
+}
+
+.asciiPortrait pre {
+  margin: 0;
+  color: transparent;
+  background: linear-gradient(
+    155deg,
+    var(--ctp-lavender) 6%,
+    var(--ctp-mauve) 48%,
+    var(--ctp-blue) 92%
+  );
+  background-clip: text;
+  font: 700 clamp(4.4px, 0.4vw, 5.8px) / 0.86 "JetBrains Mono", monospace;
+  letter-spacing: 0;
+  white-space: pre;
+  filter: drop-shadow(0 8px 18px rgb(17 17 27 / 0.54));
 }
 
 .profileCode {

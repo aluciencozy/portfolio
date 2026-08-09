@@ -15,6 +15,7 @@ import {
   Mail,
   MapPin,
 } from "lucide-react";
+import { asciiPortrait } from "./ascii-portrait";
 import { EditorScrollbar } from "./EditorScrollbar";
 import {
   education,
@@ -45,14 +46,8 @@ function ProfileVisual() {
         <span />
         <small>profile.ts</small>
       </div>
-      <div className={styles.profilePortrait} aria-hidden="true">
-        <Image
-          src="/pfp.jpg"
-          alt=""
-          fill
-          fetchPriority="high"
-          sizes="(max-width: 800px) 96px, 126px"
-        />
+      <div className={styles.asciiPortrait} aria-hidden="true">
+        <pre>{asciiPortrait}</pre>
       </div>
       <div className={styles.profileCode} aria-hidden="true">
         <span>
