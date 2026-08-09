@@ -1106,9 +1106,13 @@
 }
 
 @media (min-width: 1051px) {
+  .profileVisual { aspect-ratio: 2 / 3; }
+
+  .asciiPortrait { min-height: clamp(150px, 11vw, 180px); }
+
   .asciiPortrait pre {
     font-size: clamp(5.4px, 0.44vw, 6.6px);
-    line-height: 0.76;
+    line-height: 0.86;
   }
 }
 
