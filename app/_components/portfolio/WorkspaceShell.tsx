@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect, useRef } from "react";
 import { AnimatePresence, motion } from "motion/react";
 import { BufferTabs } from "./BufferTabs";
 import { ContentPanel } from "./ContentPanel";
@@ -34,6 +35,25 @@ export function WorkspaceShell({
   onCloseTerminal,
   onTerminalCommand,
 }: WorkspaceShellProps) {
+  const explorerButtonRef = useRef<HTMLButtonElement>(null);
+  const explorerCloseButtonRef = useRef<HTMLButtonElement>(null);
+  const wasExplorerOpen = useRef(state.explorerOpen);
+
+  useEffect(() => {
+    if (!window.matchMedia("(max-width: 800px)").matches) {
+      wasExplorerOpen.current = state.explorerOpen;
+      return;
+    }
+
+    if (state.explorerOpen && !wasExplorerOpen.current) {
+      explorerCloseButtonRef.current?.focus();
+    } else if (!state.explorerOpen && wasExplorerOpen.current) {
+      explorerButtonRef.current?.focus();
+    }
+
+    wasExplorerOpen.current = state.explorerOpen;
+  }, [state.explorerOpen]);
+
   return (
     <motion.div
       className={styles.workspace}
@@ -50,6 +70,7 @@ export function WorkspaceShell({
           onNavigate={onNavigate}
           onToggleFolder={onToggleFolder}
           onClose={onCloseExplorer}
+          closeButtonRef={explorerCloseButtonRef}
         />
         <AnimatePresence>
           {state.explorerOpen && (
@@ -71,6 +92,8 @@ export function WorkspaceShell({
             onActivate={onNavigate}
             onClose={onCloseBuffer}
             onToggleExplorer={onToggleExplorer}
+            explorerOpen={state.explorerOpen}
+            explorerButtonRef={explorerButtonRef}
           />
           <ContentPanel
             activeSection={state.activeSection}
@@ -103,4 +126,3 @@ export function WorkspaceShell({
     </motion.div>
   );
 }
-

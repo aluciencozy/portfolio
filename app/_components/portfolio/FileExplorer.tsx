@@ -1,5 +1,6 @@
 "use client";
 
+import type { RefObject } from "react";
 import {
   Braces,
   ChevronDown,
@@ -22,6 +23,7 @@ interface FileExplorerProps {
   onNavigate: (section: PortfolioSectionId) => void;
   onToggleFolder: (section: PortfolioSectionId) => void;
   onClose: () => void;
+  closeButtonRef: RefObject<HTMLButtonElement | null>;
 }
 
 function FileIcon({ kind }: { kind: "markdown" | "folder" | "json" }) {
@@ -37,15 +39,22 @@ export function FileExplorer({
   onNavigate,
   onToggleFolder,
   onClose,
+  closeButtonRef,
 }: FileExplorerProps) {
   return (
     <aside
+      id="portfolio-file-explorer"
       className={`${styles.explorer} ${open ? styles.explorerOpen : ""}`}
       aria-label="Portfolio file explorer"
     >
       <div className={styles.explorerHeader}>
         <span>EXPLORER</span>
-        <button type="button" onClick={onClose} aria-label="Close explorer">
+        <button
+          ref={closeButtonRef}
+          type="button"
+          onClick={onClose}
+          aria-label="Close explorer"
+        >
           <X size={15} />
         </button>
       </div>

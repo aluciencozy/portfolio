@@ -2,7 +2,7 @@
 
 import type { FormEvent, ReactNode } from "react";
 import { useEffect, useRef, useState } from "react";
-import { motion } from "motion/react";
+import { motion, useReducedMotion } from "motion/react";
 import { Minus, Square, Terminal as TerminalIcon, X } from "lucide-react";
 import type { TerminalEntry } from "./types";
 import styles from "./portfolio.module.css";
@@ -57,6 +57,7 @@ export function InteractiveTerminal({
   const [value, setValue] = useState("");
   const inputRef = useRef<HTMLInputElement>(null);
   const scrollRef = useRef<HTMLDivElement>(null);
+  const reducedMotion = useReducedMotion() ?? false;
 
   useEffect(() => {
     inputRef.current?.focus();
@@ -65,9 +66,9 @@ export function InteractiveTerminal({
   useEffect(() => {
     scrollRef.current?.scrollTo({
       top: scrollRef.current.scrollHeight,
-      behavior: "smooth",
+      behavior: reducedMotion ? "auto" : "smooth",
     });
-  }, [history]);
+  }, [history, reducedMotion]);
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -130,4 +131,3 @@ export function InteractiveTerminal({
     </TerminalSurface>
   );
 }
-

@@ -10,7 +10,7 @@ import {
   Download,
   ExternalLink,
   GraduationCap,
-  ImageIcon,
+  GitBranch,
   Mail,
   MapPin,
   Sparkles,
@@ -31,28 +31,72 @@ interface ContentPanelProps {
   onNavigate: (section: PortfolioSectionId) => void;
 }
 
-function MediaSlot({
-  src,
-  replacementPath,
-  alt,
-  compact = false,
-}: {
-  src?: string;
-  replacementPath: string;
-  alt: string;
-  compact?: boolean;
-}) {
+function ProfileVisual() {
   return (
-    <div className={`${styles.mediaSlot} ${compact ? styles.mediaSlotCompact : ""}`}>
-      {src ? (
-        <Image src={src} alt={alt} fill sizes="(max-width: 760px) 100vw, 38vw" />
-      ) : (
-        <div>
-          <ImageIcon size={24} strokeWidth={1.5} aria-hidden="true" />
-          <span>Image slot</span>
-          <code>{replacementPath}</code>
+    <div
+      className={`${styles.mediaSlot} ${styles.profileVisual}`}
+      role="img"
+      aria-label="Visual profile card for Alex Cosentino, a software engineer in Orlando"
+    >
+      <div className={styles.visualTitlebar} aria-hidden="true">
+        <span /><span /><span />
+        <small>profile.ts</small>
+      </div>
+      <div className={styles.profileMonogram} aria-hidden="true">AC</div>
+      <div className={styles.profileCode} aria-hidden="true">
+        <span><i>const</i> engineer = {"{"}</span>
+        <span>name: <strong>&quot;Alex Cosentino&quot;</strong>,</span>
+        <span>focus: <strong>&quot;full-stack systems&quot;</strong>,</span>
+        <span>location: <strong>&quot;Orlando, FL&quot;</strong></span>
+        <span>{"}"};</span>
+      </div>
+    </div>
+  );
+}
+
+function ProjectVisual({
+  project,
+  index,
+}: {
+  project: PortfolioProject;
+  index: number;
+}) {
+  if (project.image) {
+    return (
+      <div className={`${styles.mediaSlot} ${styles.mediaSlotCompact}`}>
+        <Image
+          src={project.image}
+          alt={`${project.title} project screenshot`}
+          fill
+          sizes="(max-width: 800px) 100vw, 38vw"
+        />
+      </div>
+    );
+  }
+
+  return (
+    <div
+      className={`${styles.mediaSlot} ${styles.mediaSlotCompact} ${styles.projectVisual}`}
+      data-accent={project.accent}
+      role="img"
+      aria-label={`${project.title} project visual summary`}
+    >
+      <div className={styles.visualTitlebar} aria-hidden="true">
+        <span /><span /><span />
+        <small>project-0{index + 1}.tsx</small>
+      </div>
+      <div className={styles.projectVisualBody} aria-hidden="true">
+        <div className={styles.projectVisualHeading}>
+          <span><GitBranch size={12} /> main</span>
+          <strong>{project.title}</strong>
         </div>
-      )}
+        <div className={styles.projectVisualPanels}>
+          <span /><span /><span />
+        </div>
+        <div className={styles.projectVisualStack}>
+          {project.tags.slice(0, 4).map((tag) => <span key={tag}>{tag}</span>)}
+        </div>
+      </div>
     </div>
   );
 }
@@ -115,10 +159,7 @@ function Overview({ onNavigate }: Pick<ContentPanelProps, "onNavigate">) {
           </div>
         </div>
         <div className={styles.profileColumn}>
-          <MediaSlot
-            replacementPath="public/profile.jpg"
-            alt="Portrait of Alex Cosentino"
-          />
+          <ProfileVisual />
           <div className={styles.profileCaption}>
             <span className={styles.promptArrow}>❯</span>
             <span>based in Orlando, FL</span>
@@ -248,17 +289,10 @@ function Experience() {
 }
 
 function ProjectCard({ project, index }: { project: PortfolioProject; index: number }) {
-  const slug = project.title.toLowerCase().replaceAll(" ", "-");
-
   return (
     <article className={styles.projectCard} data-accent={project.accent}>
       <div className={styles.projectMedia}>
-        <MediaSlot
-          src={project.image}
-          replacementPath={`public/projects/${slug}.jpg`}
-          alt={`${project.title} project screenshot`}
-          compact
-        />
+        <ProjectVisual project={project} index={index} />
         <span className={styles.projectNumber}>0{index + 1}</span>
       </div>
       <div className={styles.projectBody}>

@@ -1,5 +1,6 @@
 "use client";
 
+import type { ReactNode } from "react";
 import { useCallback, useEffect, useReducer, useRef, useState } from "react";
 import { AnimatePresence, MotionConfig, useReducedMotion } from "motion/react";
 import { BootSequence } from "./BootSequence";
@@ -14,12 +15,29 @@ type ExperiencePhase = "checking" | "booting" | "morphing" | "ready";
 
 const sessionKey = "alex-portfolio-boot-complete";
 
-export function PortfolioExperience() {
+function hasCompletedBoot() {
+  try {
+    return window.sessionStorage.getItem(sessionKey) === "true";
+  } catch {
+    return false;
+  }
+}
+
+function rememberCompletedBoot() {
+  try {
+    window.sessionStorage.setItem(sessionKey, "true");
+  } catch {
+    return;
+  }
+}
+
+export function PortfolioExperience({ children }: { children: ReactNode }) {
   const reducedMotion = useReducedMotion() ?? false;
   const [phase, setPhase] = useState<ExperiencePhase>("checking");
   const [state, dispatch] = useReducer(workspaceReducer, initialWorkspaceState);
   const entryId = useRef(1);
   const collapseTimer = useRef<number | undefined>(undefined);
+  const bootFinished = useRef(false);
 
   const openHashSection = useCallback(() => {
     const hash = window.location.hash.slice(1);
@@ -34,8 +52,7 @@ export function PortfolioExperience() {
   useEffect(() => {
     const hydrationTimer = window.setTimeout(() => {
       openHashSection();
-      const hasBooted = window.sessionStorage.getItem(sessionKey) === "true";
-      setPhase(hasBooted ? "ready" : "booting");
+      setPhase(hasCompletedBoot() ? "ready" : "booting");
     }, 0);
     window.addEventListener("hashchange", openHashSection);
 
@@ -86,9 +103,11 @@ export function PortfolioExperience() {
   );
 
   const completeBoot = useCallback(() => {
-    window.sessionStorage.setItem(sessionKey, "true");
+    if (bootFinished.current) return;
+    bootFinished.current = true;
     dispatch({ type: "set-terminal", open: true });
     setPhase("morphing");
+    rememberCompletedBoot();
     collapseTimer.current = window.setTimeout(
       () => {
         dispatch({ type: "set-terminal", open: false });
@@ -99,9 +118,11 @@ export function PortfolioExperience() {
   }, [reducedMotion]);
 
   const skipBoot = useCallback(() => {
-    window.sessionStorage.setItem(sessionKey, "true");
+    if (bootFinished.current) return;
+    bootFinished.current = true;
     dispatch({ type: "set-terminal", open: false });
     setPhase("ready");
+    rememberCompletedBoot();
   }, []);
 
   const handleTerminalCommand = useCallback(
@@ -139,8 +160,8 @@ export function PortfolioExperience() {
         <div className={styles.ambientGlow} aria-hidden="true" />
         <AnimatePresence mode="sync" initial={false}>
           {phase === "checking" && (
-            <div className={styles.loadingStage} key="checking" aria-hidden="true">
-              <div className={styles.loadingWindow} />
+            <div className={styles.fallbackStage} key="checking">
+              {children}
             </div>
           )}
           {phase === "booting" && (

@@ -18,9 +18,8 @@ Open [http://localhost:3000](http://localhost:3000).
 - Edit professional content, links, projects, experience, and skills in
   `app/_components/portfolio/data.ts`.
 - Replace `public/alex_cosentino_resume.pdf` to update the downloadable resume.
-- Add `public/profile.jpg` for the portrait slot.
-- Add project screenshots under `public/projects/` using the paths displayed in
-  each placeholder, then set the corresponding project's `image` field.
+- Set a project's optional `image` field to a public asset path to replace its
+  generated visual summary with a screenshot.
 - Change `--glass-opacity` or `--glass-blur` in `app/globals.css` to adjust or
   remove the translucent backdrop treatment.
 

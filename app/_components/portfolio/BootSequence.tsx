@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { motion } from "motion/react";
 import { FastForward } from "lucide-react";
 import { TerminalSurface } from "./TerminalSurface";
@@ -30,11 +30,19 @@ export function BootSequence({
   const [typedCommand, setTypedCommand] = useState(
     reducedMotion ? command : "",
   );
+  const completionTimer = useRef<number | undefined>(undefined);
+  const completed = useRef(false);
 
   useEffect(() => {
+    const complete = () => {
+      if (completed.current) return;
+      completed.current = true;
+      onComplete();
+    };
+
     if (reducedMotion) {
-      const timer = window.setTimeout(onComplete, 240);
-      return () => window.clearTimeout(timer);
+      completionTimer.current = window.setTimeout(complete, 240);
+      return () => window.clearTimeout(completionTimer.current);
     }
 
     let interval = 0;
@@ -45,16 +53,24 @@ export function BootSequence({
         setTypedCommand(command.slice(0, index));
         if (index >= command.length) {
           window.clearInterval(interval);
-          window.setTimeout(onComplete, 520);
+          completionTimer.current = window.setTimeout(complete, 520);
         }
       }, 82);
     }, 780);
 
     return () => {
       window.clearTimeout(startTimer);
+      window.clearTimeout(completionTimer.current);
       window.clearInterval(interval);
     };
   }, [onComplete, reducedMotion]);
+
+  const handleSkip = () => {
+    if (completed.current) return;
+    completed.current = true;
+    window.clearTimeout(completionTimer.current);
+    onSkip();
+  };
 
   return (
     <motion.div
@@ -64,7 +80,7 @@ export function BootSequence({
       exit={{ opacity: 0 }}
       transition={{ duration: reducedMotion ? 0.08 : 0.34 }}
     >
-      <button type="button" className={styles.skipButton} onClick={onSkip}>
+      <button type="button" className={styles.skipButton} onClick={handleSkip}>
         Skip intro
         <FastForward size={14} />
       </button>
@@ -111,4 +127,3 @@ export function BootSequence({
     </motion.div>
   );
 }
-
