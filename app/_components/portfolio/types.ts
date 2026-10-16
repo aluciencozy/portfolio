@@ -47,7 +47,7 @@ export interface PortfolioProject {
 export interface PortfolioLink {
   label: string;
   href?: string;
-  type: "github" | "linkedin" | "resume" | "email";
+  type: "github" | "linkedin" | "resume" | "email" | "phone";
 }
 
 export interface ExperienceEntry {

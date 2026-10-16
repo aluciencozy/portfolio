@@ -32,7 +32,6 @@ export const sections: PortfolioSection[] = [
     accent: "peach",
     children: [
       { label: "Current role", fileName: "current-role.md" },
-      { label: "Previous role", fileName: "previous-role.md" },
     ],
   },
   {
@@ -44,10 +43,9 @@ export const sections: PortfolioSection[] = [
     accent: "green",
     children: [
       { label: "Vesta Credentialing", fileName: "vesta-credentialing.ts" },
-      { label: "Demonlist Ultimate", fileName: "demonlist-ultimate.ts" },
-      { label: "Git Janitor", fileName: "git-janitor.ts" },
+      { label: "TrueFan", fileName: "truefan.ts" },
       { label: "FE Arena", fileName: "fe-arena.ts" },
-      { label: "AniFind", fileName: "anifind.ts" },
+      { label: "Demonlist Ultimate", fileName: "demonlist-ultimate.ts" },
     ],
   },
   {
@@ -72,104 +70,72 @@ export const projects: PortfolioProject[] = [
   {
     title: "Vesta Credentialing Application",
     description:
-      "An enterprise credentialing platform replacing more than 30 legacy spreadsheets with a centralized, type-safe workflow.",
-    tags: ["Next.js", "tRPC", "Drizzle ORM", "Supabase"],
+      "A type-safe full-stack credentialing platform consolidating 30+ Google Sheets into one database-backed application.",
+    tags: ["Next.js", "tRPC", "Drizzle ORM", "Supabase", "TypeScript"],
     status: "Production · 2026",
     accent: "green",
     highlights: [
-      "Role-based access control across more than 10 protected healthcare views",
-      "State-machine workflow with strict progression blockers and complete audit logging",
+      "Role-based access control (RBAC) securing healthcare records across 10+ custom views",
+      "Auditable state-machine workflows for provider privileges and licensing",
     ],
   },
   {
-    title: "Demonlist Ultimate",
+    title: "TrueFan",
     description:
-      "A full-stack platform for community submissions, global rankings, media proof, and natural-language discovery.",
-    tags: ["Next.js", "FastAPI", "PostgreSQL", "AWS"],
-    status: "Shipped · 2025–2026",
-    accent: "mauve",
-    href: "https://github.com/aluciencozy/demonlist",
-    image: "/projects/demonlist-ultimate.png",
-    highlights: [
-      "Containerized backend on EC2 with media storage through S3",
-      "Gemini-powered assistant and a frontend deployed through AWS Amplify",
-    ],
-  },
-  {
-    title: "Git Janitor",
-    description:
-      "A published interactive CLI that makes local and remote Git repository maintenance safer, faster, and easier to understand.",
-    tags: ["TypeScript", "Node.js", "npm", "Git"],
-    status: "Published · npm package",
+      "A co-developed, launched spoiler-aware anime explorer with interactive knowledge graphs filtered by episode progress.",
+    tags: ["React", "TypeScript", "React Flow", "FastAPI", "Neon PostgreSQL"],
+    status: "Launched · Live app",
     accent: "teal",
-    href: "https://github.com/aluciencozy/git-janitor",
-    liveHref: "https://www.npmjs.com/package/@alcozy/git-janitor",
-    image: "/projects/git-janitor.png",
+    href: "https://github.com/aluciencozy/truefan",
+    liveHref: "https://truefan.dev",
+    image: "/projects/truefan.png",
     imageFit: "contain",
     highlights: [
-      "Keyboard-navigated workflows for pruning merged branches, syncing remotes, and inspecting active branches",
-      "Published globally through npm with guardrails around destructive Git operations",
+      "AniList GraphQL and experimental Hugging Face inference with Neon PostgreSQL caching",
+      "Resumable background jobs with deployments on Vercel and Railway",
     ],
   },
   {
     title: "FE Arena",
     description:
-      "An unofficial UCF Foundation Exam study platform with solo practice, public matchmaking, private rooms, and browser-based C coding rounds.",
-    tags: [
-      "React",
-      "TypeScript",
-      "Socket.io",
-      "Node.js",
-      "Supabase",
-      "WebAssembly",
-    ],
+      "A real-time multiplayer UCF Computer Science exam-prep platform with private rooms and public matchmaking.",
+    tags: ["React", "TypeScript", "Node.js", "Socket.IO", "WebAssembly"],
     status: "In development · 2026",
     accent: "blue",
     href: "https://github.com/aluciencozy/fe-arena",
     image: "/projects/fe-arena.png",
     highlights: [
-      "Server-authoritative five-round matches with queueing, rematches, chat, deadline-safe state transitions, and reconnect recovery",
-      "Original multi-format question bank plus timed browser-only C execution inside prewarmed WebAssembly workers",
+      "Server-authoritative match state machines, synchronized timers, secure server-side grading, and reconnect recovery",
+      "In-browser C execution using WebAssembly workers",
     ],
   },
   {
-    title: "AniFind",
+    title: "Demonlist Ultimate",
     description:
-      "A full-stack anime discovery platform where users can search titles, explore current favorites, and manage a personal watchlist.",
-    tags: ["React", "Node.js", "Express", "MongoDB", "JWT", "AniList API"],
-    status: "Shipped · Full-stack app",
-    accent: "green",
-    href: "https://github.com/aluciencozy/anifind-fullstack",
-    liveHref: "https://anifind-fullstack.vercel.app/",
-    image: "/projects/anifind.png",
-    imageFit: "contain",
+      "A full-stack leaderboard with REST APIs, OAuth2/JWT authentication, user-uploaded media, and an AI chatbot.",
+    tags: ["Next.js", "FastAPI", "PostgreSQL", "AWS", "Docker"],
+    status: "Shipped · 2025–2026",
+    accent: "mauve",
+    href: "https://github.com/aluciencozy/demonlist",
+    image: "/projects/demonlist-ultimate.png",
     highlights: [
-      "Secure REST API with JWT authentication and MongoDB-backed watchlist CRUD operations",
-      "Responsive React interface combining the custom backend with the AniList GraphQL API",
+      "Docker-containerized Python backend on AWS EC2, RDS database hosting, and AWS Amplify frontend CI/CD",
+      "AWS S3 for avatars and video submissions, plus an AI chatbot using Gemini and Groq APIs",
     ],
   },
 ];
 
 export const experience: ExperienceEntry[] = [
   {
-    role: "Software Developer Intern",
+    role: "Software Developer",
     organization: "Vesta Teleradiology",
     location: "Lake Mary, FL",
     period: "Feb 2026 - Present",
     highlights: [
-      "Migrated more than 50,000 legacy records into Supabase with zero data loss using over 10 automated Python scripts, strict upserts, and transactional integrity checks.",
-      "Built GitHub Actions delivery pipelines with linting, required peer review, and deployments to GCP Cloud Run.",
-      "Integrated n8n webhook workflows for automated credentialing emails and real-time system alerts.",
-      "Led agile sprint execution through GitHub Projects and presented weekly technical progress to executive leadership.",
-    ],
-  },
-  {
-    role: "Food and Beverage Attendant",
-    organization: "Hilton Food and Beverage",
-    location: "Sanford, FL",
-    period: "Jun 2024 - Aug 2026",
-    highlights: [
-      "Deliver high-efficiency customer service in a fast-paced environment while coordinating inventory and resolving guest issues across teams.",
+      "Migrated 50,000+ legacy records into a relational Supabase/PostgreSQL database using 10+ Python ETL scripts, with idempotent upserts and transactional integrity checks to prevent data loss.",
+      "Built GitHub Actions CI/CD pipelines with automated linting and peer-reviewed pull request checks to standardize deployments to GCP Cloud Run.",
+      "Helped lead GCP infrastructure planning across Compute Engine VMs, Cloud Run services/jobs, IAM, and VPC networking; evaluated PostgreSQL read replicas and CDC/logical replication.",
+      "Coordinated Agile sprints using GitHub Projects, delegated engineering tickets, and presented weekly technical progress to executive leadership.",
     ],
   },
 ];
@@ -183,6 +149,11 @@ export const education = {
 };
 
 export const externalLinks: PortfolioLink[] = [
+  {
+    label: "407-724-6962",
+    href: "tel:+14077246962",
+    type: "phone",
+  },
   {
     label: "GitHub",
     href: "https://github.com/aluciencozy",
@@ -206,24 +177,17 @@ export const externalLinks: PortfolioLink[] = [
 ];
 
 export const skills = {
-  languages: ["TypeScript", "JavaScript", "Python", "SQL", "Java", "C"],
+  languages: ["TypeScript", "JavaScript", "Python", "SQL", "Java", "C", "Rust"],
   frameworks: [
-    "Next.js",
-    "React",
-    "Node.js",
-    "tRPC",
-    "Drizzle ORM",
-    "FastAPI",
-    "Motion",
+    "Next.js", "React", "Node.js", "tRPC", "Drizzle ORM", "FastAPI",
+    "Socket.IO", "React Flow", "Zod", "Vite",
   ],
-  architecture: [
-    "Supabase",
-    "PostgreSQL",
-    "REST APIs",
-    "Webhooks",
-    "Socket.io",
-  ],
+  architecture: ["Supabase", "PostgreSQL", "Neon", "REST APIs", "GraphQL", "Webhooks"],
   tools: ["GCP", "AWS", "Docker", "GitHub Actions", "Git", "n8n"],
+  other: [
+    "Vercel", "Railway", "Hugging Face", "WebAssembly", "OAuth2", "JWT",
+    "CI/CD", "Linux", "WebSockets",
+  ],
 };
 
 export const sectionById = Object.fromEntries(

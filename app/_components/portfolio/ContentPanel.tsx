@@ -14,6 +14,7 @@ import {
   GitBranch,
   Mail,
   MapPin,
+  Phone,
 } from "lucide-react";
 import { asciiPortrait } from "./ascii-portrait";
 import { CustomScrollbar } from "./CustomScrollbar";
@@ -158,7 +159,7 @@ function Overview({ onNavigate }: Pick<ContentPanelProps, "onNavigate">) {
         <div className={styles.heroCopy}>
           <div className={styles.availabilityPill}>
             <span />
-            Software Developer Intern · CS at UCF
+            Software Developer · CS at UCF
           </div>
           <p className={styles.editorComment}>{"// README.md"}</p>
           <h1>
@@ -201,11 +202,11 @@ function Overview({ onNavigate }: Pick<ContentPanelProps, "onNavigate">) {
       <div className={styles.metricsGrid} aria-label="Career highlights">
         <div>
           <strong>50K+</strong>
-          <span>records migrated with zero data loss</span>
+          <span>legacy records migrated</span>
         </div>
         <div>
           <strong>10+</strong>
-          <span>automated migration scripts</span>
+          <span>Python ETL scripts</span>
         </div>
         <div>
           <strong>{projects.length}</strong>
@@ -439,8 +440,9 @@ function Skills() {
   const categories = [
     ["languages", skills.languages],
     ["frameworks & libraries", skills.frameworks],
-    ["databases & architecture", skills.architecture],
+    ["databases & APIs", skills.architecture],
     ["cloud, devops & tools", skills.tools],
+    ["other technologies", skills.other],
   ] as const;
 
   return (
@@ -490,6 +492,7 @@ function Contact() {
     linkedin: BriefcaseBusiness,
     resume: Download,
     email: Mail,
+    phone: Phone,
   };
 
   return (
@@ -510,8 +513,8 @@ function Contact() {
             <a
               href={link.href}
               key={link.type}
-              target={link.type === "email" ? undefined : "_blank"}
-              rel={link.type === "email" ? undefined : "noreferrer"}
+              target={(link.type === "email" || link.type === "phone") ? undefined : "_blank"}
+              rel={(link.type === "email" || link.type === "phone") ? undefined : "noreferrer"}
             >
               <span>
                 <Icon size={18} />

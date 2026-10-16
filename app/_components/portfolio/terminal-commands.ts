@@ -1,4 +1,4 @@
-import { externalLinks, projects, sectionById } from "./data";
+import { experience, externalLinks, projects, sectionById, skills } from "./data";
 import type {
   PortfolioSectionId,
   TerminalCommandResult,
@@ -72,7 +72,7 @@ function resolveDirectory(
 
 function directoryListing(path: TerminalDirectory): string[] {
   if (path === "~/portfolio/experience") {
-    return ["current-role.md  previous-role.md"];
+    return [sectionById.experience.children?.map((entry) => entry.fileName).join("  ") ?? ""];
   }
   if (path === "~/portfolio/projects") {
     return [sectionById.projects.children?.map((project) => project.fileName).join("  ") ?? ""];
@@ -93,11 +93,14 @@ function catFile(rawFile: string, cwd: TerminalDirectory): TerminalCommandResult
   const file = resolveFileName(rawFile, cwd);
   const staticFiles: Record<string, string[]> = {
     "readme.md": ["Alex Cosentino", "Software developer building reliable full-stack systems with product-minded detail."],
-    "about.md": ["CS student at UCF and Software Developer Intern at Vesta Teleradiology.", "Terminal-first workflow, Catppuccin Mocha enthusiast."],
-    "skills.json": ["{ TypeScript, React, Next.js, Node.js, Python, SQL, PostgreSQL, AWS, GCP }"],
-    "contact.md": ["GitHub: github.com/aluciencozy", "LinkedIn: linkedin.com/in/alcozy", "Email: aluciencozy22@gmail.com"],
-    "current-role.md": ["Software Developer Intern - Vesta Teleradiology", "Feb 2026 - Present"],
-    "previous-role.md": ["Food and Beverage Attendant - Hilton", "Jun 2024 - Aug 2026"],
+    "about.md": ["CS student at UCF and Software Developer at Vesta Teleradiology.", "Terminal-first workflow, Catppuccin Mocha enthusiast."],
+    "skills.json": JSON.stringify(skills, null, 2).split("\n"),
+    "contact.md": ["GitHub: github.com/aluciencozy", "LinkedIn: linkedin.com/in/alcozy", "Email: aluciencozy22@gmail.com", "Phone: 407-724-6962"],
+    "current-role.md": [
+      `${experience[0].role} - ${experience[0].organization}`,
+      experience[0].period,
+      ...experience[0].highlights,
+    ],
   };
 
   if (staticFiles[file]) return { type: "print", lines: staticFiles[file] };
