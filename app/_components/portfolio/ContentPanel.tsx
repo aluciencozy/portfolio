@@ -14,6 +14,7 @@ import {
   GitBranch,
   Mail,
   MapPin,
+  Package,
   Phone,
 } from "lucide-react";
 import { asciiPortrait } from "./ascii-portrait";
@@ -389,6 +390,17 @@ function ProjectCard({
                 <Code2 size={15} />
               </a>
             )}
+            {project.packageHref && (
+              <a
+                href={project.packageHref}
+                target="_blank"
+                rel="noreferrer"
+                aria-label={`View ${project.title} on crates.io`}
+                title="View on crates.io"
+              >
+                <Package size={15} />
+              </a>
+            )}
             {project.liveHref && (
               <a
                 href={project.liveHref}
@@ -425,7 +437,7 @@ function Projects() {
       <SectionHeading
         eyebrow="PROJECTS/"
         title="Selected systems I’ve designed and built."
-        description="A mix of production healthcare tooling, cloud architecture, real-time experiences, and AI-assisted interfaces."
+        description="A mix of production healthcare software, developer tooling, cloud architecture, and real-time experiences."
       />
       <div className={styles.projectList}>
         {projects.map((project, index) => (

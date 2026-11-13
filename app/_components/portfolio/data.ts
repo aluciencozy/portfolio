@@ -43,8 +43,9 @@ export const sections: PortfolioSection[] = [
     accent: "green",
     children: [
       { label: "Vesta Credentialing", fileName: "vesta-credentialing.ts" },
-      { label: "TrueFan", fileName: "truefan.ts" },
       { label: "FE Arena", fileName: "fe-arena.ts" },
+      { label: "DevDoctor", fileName: "devdoctor.ts" },
+      { label: "TrueFan", fileName: "truefan.ts" },
       { label: "Demonlist Ultimate", fileName: "demonlist-ultimate.ts" },
     ],
   },
@@ -80,6 +81,36 @@ export const projects: PortfolioProject[] = [
     ],
   },
   {
+    title: "FE Arena",
+    description:
+      "A real-time multiplayer UCF Computer Science exam-prep platform with private rooms and public matchmaking.",
+    tags: ["React", "TypeScript", "Node.js", "Socket.IO", "WebAssembly"],
+    status: "In development · 2026",
+    accent: "blue",
+    href: "https://github.com/aluciencozy/fe-arena",
+    image: "/projects/fe-arena.png",
+    highlights: [
+      "Server-authoritative match state machines, synchronized timers, secure server-side grading, and reconnect recovery",
+      "In-browser C execution using WebAssembly workers",
+    ],
+  },
+  {
+    title: "DevDoctor",
+    description:
+      "A read-only Rust terminal app for inspecting processes, TCP listeners, and developer-tool installations in PATH order.",
+    tags: ["Rust", "Ratatui", "Crossterm", "sysinfo"],
+    status: "Published on crates.io · 2026",
+    accent: "peach",
+    href: "https://github.com/aluciencozy/devdoctor",
+    packageHref: "https://crates.io/crates/devdoctor",
+    image: "/projects/devdoctor.png",
+    imageFit: "contain",
+    highlights: [
+      "PATH-ordered executable discovery and timeout-controlled version probes; install with cargo install devdoctor",
+      "Interactive filtering and automated tests covering keyboard navigation, failure states, and terminal rendering",
+    ],
+  },
+  {
     title: "TrueFan",
     description:
       "A co-developed, launched spoiler-aware anime explorer with interactive knowledge graphs filtered by episode progress.",
@@ -93,20 +124,6 @@ export const projects: PortfolioProject[] = [
     highlights: [
       "AniList GraphQL and experimental Hugging Face inference with Neon PostgreSQL caching",
       "Resumable background jobs with deployments on Vercel and Railway",
-    ],
-  },
-  {
-    title: "FE Arena",
-    description:
-      "A real-time multiplayer UCF Computer Science exam-prep platform with private rooms and public matchmaking.",
-    tags: ["React", "TypeScript", "Node.js", "Socket.IO", "WebAssembly"],
-    status: "In development · 2026",
-    accent: "blue",
-    href: "https://github.com/aluciencozy/fe-arena",
-    image: "/projects/fe-arena.png",
-    highlights: [
-      "Server-authoritative match state machines, synchronized timers, secure server-side grading, and reconnect recovery",
-      "In-browser C execution using WebAssembly workers",
     ],
   },
   {
